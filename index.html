@@ -204,10 +204,18 @@
                                 <input type="text" class="form-control" id="pelanggan" required>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">PILIH CUP / BAHAN BAKU</label>
+                                <label class="form-label">PILIH CUP / DATAR</label>
                                 <select class="form-select" id="bahanSelect" onchange="onBahanSelected()" required>
                                     <option value="">-- Pilih Cup / Bahan Baku --</option>
                                 </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">OZ (UKURAN)</label>
+                                <input type="text" class="form-control" id="ozInput" placeholder="Contoh: 12 oz, 14 oz">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">JENIS BAHAN</label>
+                                <input type="text" class="form-control" id="jenisInput" placeholder="Contoh: PET, Inject">
                             </div>
                             <div class="col-6">
                                 <label class="form-label">QUANTITY (PCS)</label>
@@ -273,7 +281,6 @@
                 </button>
             </div>
 
-            <!-- TABEL 1: Sisa Stok Gudang -->
             <div class="card-app mb-3">
                 <div class="card-app-header">
                     <h6 class="fw-bold mb-0"><i class="bi bi-box-seam me-1 text-success"></i> Sisa Stok Gudang</h6>
@@ -297,7 +304,6 @@
                 </div>
             </div>
 
-            <!-- TABEL 2: Tracking Operator Pemakai Stok -->
             <div class="card-app mb-3">
                 <div class="card-app-header">
                     <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-person-badge me-1"></i> Tracking Operator Pemakai Stok</h6>
@@ -321,7 +327,6 @@
                 </div>
             </div>
 
-            <!-- TABEL 3: Riwayat Stok Masuk -->
             <div class="card-app">
                 <div class="card-app-header">
                     <h6 class="fw-bold mb-0"><i class="bi bi-arrow-down-left-square me-1 text-info"></i> Riwayat Stok Masuk</h6>
@@ -346,7 +351,7 @@
             </div>
         </div>
 
-        <!-- ================= HALAMAN 4: GAJI PEKERJA (KOLOM PERSIS EXCEL) ================= -->
+        <!-- ================= HALAMAN 4: GAJI PEKERJA ================= -->
         <div id="page-gaji" class="page-section">
             <div class="card-app">
                 <div class="card-app-header d-flex justify-content-between align-items-center">
@@ -376,7 +381,7 @@
             </div>
         </div>
 
-        <!-- ================= HALAMAN 5: LAPORAN OWNER (KOLOM PERSIS EXCEL) ================= -->
+        <!-- ================= HALAMAN 5: LAPORAN OWNER ================= -->
         <div id="page-owner" class="page-section">
             <div class="row g-2 mb-3">
                 <div class="col-6">
@@ -464,7 +469,7 @@
                         <input type="date" class="form-control" id="modalTanggalIn" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">NAMA CUP / MERK & OZ</label>
+                        <label class="form-label">NAMA CUP / MERK</label>
                         <input type="text" class="form-control" id="modalNamaBahan" required>
                     </div>
                     <div class="col-6">
@@ -548,29 +553,6 @@
         return `${day}-${month}-${year}`;
       }
 
-      // Helper untuk ekstrak OZ dan Jenis dari teks nama bahan
-      function parseBahanDetails(namaBahan) {
-        if (!namaBahan) return { cup: "-", oz: "-", jenis: "Sablon" };
-        
-        let oz = "-";
-        let jenis = "Sablon";
-        let cup = namaBahan;
-
-        // Cari pola OZ (contoh: 12, 14, 16, 22)
-        const ozMatch = namaBahan.match(/\b(12|14|16|18|22)\b/i);
-        if (ozMatch) {
-          oz = ozMatch[0] + " oz";
-        }
-
-        // Cari Jenis (PET, INJECT, OVAL, DATAR, DLL)
-        if (namaBahan.toUpperCase().includes("PET")) jenis = "PET";
-        else if (namaBahan.toUpperCase().includes("INJECT")) jenis = "INJECT";
-        else if (namaBahan.toUpperCase().includes("OVAL")) jenis = "OVAL";
-        else if (namaBahan.toUpperCase().includes("DATAR")) jenis = "DATAR";
-
-        return { cup: cup, oz: oz, jenis: jenis };
-      }
-
       document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('tanggal').valueAsDate = new Date();
         document.getElementById('modalTanggalIn').valueAsDate = new Date();
@@ -601,6 +583,8 @@
           noPO: document.getElementById('noPO').value,
           pelanggan: document.getElementById('pelanggan').value,
           bahan: document.getElementById('bahanSelect').value,
+          oz: document.getElementById('ozInput').value,
+          jenis: document.getElementById('jenisInput').value,
           qty: document.getElementById('qty').value,
           tarif: document.getElementById('tarif').value,
           pekerja: document.getElementById('pekerja').value,
@@ -674,7 +658,6 @@
         });
       });
 
-      // Fungsi khusus render tabel persis Excel
       function renderExcelStyleTable(containerElement, ordersData) {
         containerElement.innerHTML = "";
         if (!ordersData || ordersData.length === 0) {
@@ -710,15 +693,13 @@
             totalOpQty += Number(ord.qty || 0);
             totalOpUpah += Number(ord.totalUpah || 0);
 
-            const details = parseBahanDetails(ord.bahan);
-
             const row = document.createElement("tr");
             row.innerHTML = `
               <td class="ps-3 text-muted" style="font-size:0.75rem;">${formatTanggalIndo(ord.tanggal)}</td>
               <td class="fw-semibold text-dark">${ord.pelanggan}</td>
-              <td class="fw-semibold">${details.cup}</td>
-              <td class="text-center text-muted">${details.oz}</td>
-              <td class="text-center"><span class="badge bg-light text-dark border">${details.jenis}</span></td>
+              <td class="fw-semibold">${ord.bahan}</td>
+              <td class="text-center text-muted">${ord.oz || '-'}</td>
+              <td class="text-center"><span class="badge bg-light text-dark border">${ord.jenis || '-'}</span></td>
               <td class="text-center text-muted">Rp ${Number(ord.tarif).toLocaleString('id-ID')}</td>
               <td class="text-end fw-bold">${Number(ord.qty).toLocaleString('id-ID')}</td>
               <td class="text-end pe-3 fw-bold text-primary">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</td>
@@ -787,7 +768,7 @@
                     </td>
                     <td>
                         <div class="fw-semibold text-dark">${ord.pelanggan}</div>
-                        <small class="text-muted">${ord.bahan}</small>
+                        <small class="text-muted">${ord.bahan} (${ord.oz})</small>
                     </td>
                     <td>
                         <div class="fw-bold">${Number(ord.qty).toLocaleString('id-ID')} <small class="fw-normal">pcs</small></div>
@@ -874,7 +855,7 @@
                 tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada riwayat.</td></tr>';
               }
 
-              // 5 & 6. Render Gaji & Laporan Owner MODEL EXCEL 8 KOLOM PERSIS
+              // 5 & 6. Render Gaji & Laporan Owner MODEL EXCEL 8 KOLOM
               renderExcelStyleTable(tbodyGaji, res.orders);
               renderExcelStyleTable(tbodyOwner, res.orders);
 
@@ -915,7 +896,7 @@
             <tr>
               <td class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(o.tanggal)}</td>
               <td class="fw-semibold">${o.noPO}</td>
-              <td>${o.bahan}</td>
+              <td>${o.bahan} (${o.oz})</td>
               <td class="text-end">${Number(o.qty).toLocaleString('id-ID')}</td>
               <td class="text-end fw-semibold">Rp ${Number(o.totalUpah).toLocaleString('id-ID')}</td>
             </tr>
