@@ -110,6 +110,7 @@
         background: #f8fafc;
         padding: 0.65rem 0.75rem;
         border-bottom: 1px solid var(--card-border);
+        white-space: nowrap;
       }
       .table-app td {
         padding: 0.7rem 0.75rem;
@@ -117,6 +118,7 @@
         vertical-align: middle;
         border-bottom: 1px solid #f1f5f9;
         color: #334155;
+        white-space: nowrap;
       }
 
       .stat-card {
@@ -130,7 +132,7 @@
         background-color: #f1f5f9;
         font-weight: 700;
         color: #0f172a;
-        padding: 0.5rem 0.75rem;
+        padding: 0.6rem 0.75rem;
         font-size: 0.85rem;
         border-top: 2px solid var(--card-border);
       }
@@ -195,11 +197,11 @@
                             </div>
                             <div class="col-6">
                                 <label class="form-label">NO. PO / INVOICE</label>
-                                <input type="text" class="form-control" id="noPO" placeholder="PO-001" required>
+                                <input type="text" class="form-control" id="noPO" required>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">NAMA CAFÉ / PELANGGAN</label>
-                                <input type="text" class="form-control" id="pelanggan" placeholder="Contoh: BCL / BAJA / IJES" required>
+                                <input type="text" class="form-control" id="pelanggan" required>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">PILIH CUP / BAHAN BAKU</label>
@@ -209,15 +211,15 @@
                             </div>
                             <div class="col-6">
                                 <label class="form-label">QUANTITY (PCS)</label>
-                                <input type="number" class="form-control" id="qty" placeholder="4000" required>
+                                <input type="number" class="form-control" id="qty" required>
                             </div>
                             <div class="col-6">
                                 <label class="form-label">JASA SABLON (RP/PCS)</label>
-                                <input type="number" class="form-control bg-light" id="tarif" readonly placeholder="35">
+                                <input type="number" class="form-control bg-light" id="tarif" readonly>
                             </div>
                             <div class="col-6">
                                 <label class="form-label">OPERATOR / PEKERJA</label>
-                                <input type="text" class="form-control" id="pekerja" placeholder="Contoh: FADLI" required>
+                                <input type="text" class="form-control" id="pekerja" required>
                             </div>
                             <div class="col-6">
                                 <label class="form-label">STATUS ORDER</label>
@@ -344,27 +346,29 @@
             </div>
         </div>
 
-        <!-- ================= HALAMAN 4: GAJI PEKERJA (RINCIAN MODEL EXCEL) ================= -->
+        <!-- ================= HALAMAN 4: GAJI PEKERJA (KOLOM PERSIS EXCEL) ================= -->
         <div id="page-gaji" class="page-section">
             <div class="card-app">
                 <div class="card-app-header d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-wallet2 me-1 text-primary"></i> Rincian Upah Operator</h6>
+                    <h6 class="fw-bold mb-0"><i class="bi bi-wallet2 me-1 text-primary"></i> Rekap Upah Operator</h6>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-app align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th class="ps-3">Tgl</th>
-                                    <th>Café</th>
-                                    <th>Cup / Bahan</th>
-                                    <th class="text-center">Jasa</th>
-                                    <th class="text-end">Qty</th>
-                                    <th class="text-end pe-3">Total</th>
+                                    <th class="ps-3">TANGGAL</th>
+                                    <th>CAFÉ</th>
+                                    <th>CUP / DATAR</th>
+                                    <th class="text-center">OZ</th>
+                                    <th class="text-center">JENIS</th>
+                                    <th class="text-center">JASA</th>
+                                    <th class="text-end">QUANTITY</th>
+                                    <th class="text-end pe-3">TOTAL</th>
                                 </tr>
                             </thead>
                             <tbody id="gaji-body">
-                                <tr><td colspan="6" class="text-center py-4 text-muted">Memuat rekap gaji...</td></tr>
+                                <tr><td colspan="8" class="text-center py-4 text-muted">Memuat rekap gaji...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -372,7 +376,7 @@
             </div>
         </div>
 
-        <!-- ================= HALAMAN 5: LAPORAN OWNER (MODEL EXCEL RINCI) ================= -->
+        <!-- ================= HALAMAN 5: LAPORAN OWNER (KOLOM PERSIS EXCEL) ================= -->
         <div id="page-owner" class="page-section">
             <div class="row g-2 mb-3">
                 <div class="col-6">
@@ -399,16 +403,18 @@
                         <table class="table table-app align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th class="ps-3">Tgl</th>
-                                    <th>Café</th>
-                                    <th>Cup / Bahan</th>
-                                    <th class="text-center">Jasa</th>
-                                    <th class="text-end">Qty</th>
-                                    <th class="text-end pe-3">Total</th>
+                                    <th class="ps-3">TANGGAL</th>
+                                    <th>CAFÉ</th>
+                                    <th>CUP / DATAR</th>
+                                    <th class="text-center">OZ</th>
+                                    <th class="text-center">JENIS</th>
+                                    <th class="text-center">JASA</th>
+                                    <th class="text-end">QUANTITY</th>
+                                    <th class="text-end pe-3">TOTAL</th>
                                 </tr>
                             </thead>
                             <tbody id="owner-body">
-                                <tr><td colspan="6" class="text-center py-4 text-muted">Memuat rekap...</td></tr>
+                                <tr><td colspan="8" class="text-center py-4 text-muted">Memuat rekap...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -458,20 +464,20 @@
                         <input type="date" class="form-control" id="modalTanggalIn" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">NAMA CUP / MERK & OZ (CONTOH: STARINDO 12 PET)</label>
-                        <input type="text" class="form-control" id="modalNamaBahan" placeholder="Contoh: STARINDO - 12 (PET) / LIBRA - 14 (INJECT)" required>
+                        <label class="form-label">NAMA CUP / MERK & OZ</label>
+                        <input type="text" class="form-control" id="modalNamaBahan" required>
                     </div>
                     <div class="col-6">
                         <label class="form-label">JUMLAH MASUK (PCS)</label>
-                        <input type="number" class="form-control" id="modalStokAwal" placeholder="10000" required>
+                        <input type="number" class="form-control" id="modalStokAwal" required>
                     </div>
                     <div class="col-6">
                         <label class="form-label">TARIF JASA SABLON/PCS (RP)</label>
-                        <input type="number" class="form-control" id="modalTarif" placeholder="35" required>
+                        <input type="number" class="form-control" id="modalTarif" required>
                     </div>
                     <div class="col-12">
                         <label class="form-label">KETERANGAN / SUPLIER</label>
-                        <input type="text" class="form-control" id="modalKet" placeholder="Beli dari Toko Plastik A">
+                        <input type="text" class="form-control" id="modalKet">
                     </div>
                 </div>
             </div>
@@ -540,6 +546,29 @@
         const month = String(d.getMonth() + 1).padStart(2, '0');
         const year = d.getFullYear();
         return `${day}-${month}-${year}`;
+      }
+
+      // Helper untuk ekstrak OZ dan Jenis dari teks nama bahan
+      function parseBahanDetails(namaBahan) {
+        if (!namaBahan) return { cup: "-", oz: "-", jenis: "Sablon" };
+        
+        let oz = "-";
+        let jenis = "Sablon";
+        let cup = namaBahan;
+
+        // Cari pola OZ (contoh: 12, 14, 16, 22)
+        const ozMatch = namaBahan.match(/\b(12|14|16|18|22)\b/i);
+        if (ozMatch) {
+          oz = ozMatch[0] + " oz";
+        }
+
+        // Cari Jenis (PET, INJECT, OVAL, DATAR, DLL)
+        if (namaBahan.toUpperCase().includes("PET")) jenis = "PET";
+        else if (namaBahan.toUpperCase().includes("INJECT")) jenis = "INJECT";
+        else if (namaBahan.toUpperCase().includes("OVAL")) jenis = "OVAL";
+        else if (namaBahan.toUpperCase().includes("DATAR")) jenis = "DATAR";
+
+        return { cup: cup, oz: oz, jenis: jenis };
       }
 
       document.addEventListener("DOMContentLoaded", function() {
@@ -645,14 +674,14 @@
         });
       });
 
+      // Fungsi khusus render tabel persis Excel
       function renderExcelStyleTable(containerElement, ordersData) {
         containerElement.innerHTML = "";
         if (!ordersData || ordersData.length === 0) {
-          containerElement.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">Belum ada data pengerjaan.</td></tr>';
+          containerElement.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Belum ada data pengerjaan.</td></tr>';
           return;
         }
 
-        // Grouping berdasarkan Operator
         let grouped = {};
         ordersData.forEach(ord => {
           const op = ord.pekerja ? ord.pekerja.toUpperCase().trim() : "LAINNYA";
@@ -660,12 +689,10 @@
           grouped[op].push(ord);
         });
 
-        // Render tabel per Operator
         Object.keys(grouped).forEach(opName => {
-          // Sub-header Operator
           const headerRow = document.createElement("tr");
           headerRow.innerHTML = `
-            <td colspan="6" class="operator-section-header">
+            <td colspan="8" class="operator-section-header">
               <div class="d-flex justify-content-between align-items-center">
                 <span><i class="bi bi-person-fill me-1 text-primary"></i> OPERATOR: ${opName}</span>
                 <button class="btn btn-xs btn-outline-primary py-0 px-2 fw-bold" style="font-size:0.7rem;" onclick="printSlipGaji('${opName}')">
@@ -683,23 +710,26 @@
             totalOpQty += Number(ord.qty || 0);
             totalOpUpah += Number(ord.totalUpah || 0);
 
+            const details = parseBahanDetails(ord.bahan);
+
             const row = document.createElement("tr");
             row.innerHTML = `
               <td class="ps-3 text-muted" style="font-size:0.75rem;">${formatTanggalIndo(ord.tanggal)}</td>
               <td class="fw-semibold text-dark">${ord.pelanggan}</td>
-              <td>${ord.bahan}</td>
-              <td class="text-center text-muted">${ord.tarif}</td>
+              <td class="fw-semibold">${details.cup}</td>
+              <td class="text-center text-muted">${details.oz}</td>
+              <td class="text-center"><span class="badge bg-light text-dark border">${details.jenis}</span></td>
+              <td class="text-center text-muted">Rp ${Number(ord.tarif).toLocaleString('id-ID')}</td>
               <td class="text-end fw-bold">${Number(ord.qty).toLocaleString('id-ID')}</td>
               <td class="text-end pe-3 fw-bold text-primary">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</td>
             `;
             containerElement.appendChild(row);
           });
 
-          // Summary Baris Total per Operator
           const footerRow = document.createElement("tr");
           footerRow.className = "table-light fw-bold";
           footerRow.innerHTML = `
-            <td colspan="4" class="ps-3 text-dark" style="font-size:0.75rem;">TOTAL (${opName})</td>
+            <td colspan="6" class="ps-3 text-dark" style="font-size:0.75rem;">TOTAL KESELURUHAN (${opName})</td>
             <td class="text-end text-dark">${totalOpQty.toLocaleString('id-ID')}</td>
             <td class="text-end pe-3 text-success">Rp ${totalOpUpah.toLocaleString('id-ID')}</td>
           `;
@@ -844,7 +874,7 @@
                 tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada riwayat.</td></tr>';
               }
 
-              // 5 & 6. Render Gaji & Laporan Owner MODEL EXCEL RINCI
+              // 5 & 6. Render Gaji & Laporan Owner MODEL EXCEL 8 KOLOM PERSIS
               renderExcelStyleTable(tbodyGaji, res.orders);
               renderExcelStyleTable(tbodyOwner, res.orders);
 
