@@ -4,24 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Operasional Percetakan</title>
-    <!-- CSS Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
+    <script>
+      // Ganti dengan URL Aplikasi Web dari Apps Script Anda
+      const API_URL = "https://script.google.com/macros/s/AKfycbw1u9cDQdcmd7xmbfxa_D9y28YVFPy6G0hWNJTZvzcR1GTgtSWvCrgUAut9f51WlowP/exec";
+    </script>
+
     <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-primary mb-4">
+    <nav class="navbar navbar-dark bg-primary mb-4 shadow-sm">
         <div class="container">
             <span class="navbar-brand mb-0 h1">📦 Sistem Percetakan Sablon</span>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="card shadow-sm p-4 text-center">
-            <h3>Website Sistem Percetakan Aktif!</h3>
-            <p class="text-muted">Database Google Sheets siap dihubungkan.</p>
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="card-title mb-0 fw-bold">📝 Input Order Pesanan Baru (PO)</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        
+                        <!-- Notifikasi Sukses / Gagal -->
+                        <div id="alertBox" class="alert d-none" role="alert"></div>
+
+                        <form id="formPO">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label font-weight-bold">Tanggal Pesanan</label>
+                                    <input type="date" class="form-control" id="tanggal" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">No. PO / Invoice</label>
+                                    <input type="text" class="form-control" id="noPO" placeholder="Contoh: PO-001" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Nama Pelanggan</label>
+                                    <input type="text" class="form-control" id="pelanggan" placeholder="Nama Pelanggan / Toko" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Bahan / Jenis Cup</label>
+                                    <input type="text" class="form-control" id="bahan" placeholder="Contoh: Cup 16oz Oval" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Jumlah Order (Qty)</label>
+                                    <input type="number" class="form-control" id="qty" placeholder="0" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Pekerja / Operator</label>
+                                    <input type="text" class="form-control" id="pekerja" placeholder="Nama Pekerja" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Status Awal</label>
+                                    <select class="form-select" id="status">
+                                        <option value="Proses" selected>Proses</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Selesai">Selesai</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <button type="submit" id="btnSimpan" class="btn btn-primary w-100 py-2 fw-bold">
+                                🚀 Simpan Order ke Database
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
+    <!-- Script Pengirim Data -->
+    <script>
+      // Set tanggal default ke hari ini
+      document.getElementById('tanggal').valueAsDate = new Date();
+
+      document.getElementById('formPO').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btnSimpan');
+        const alertBox = document.getElementById('alertBox');
+        
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Menyimpan data...';
+        alertBox.classList.add('d-none');
+
+        const payload = {
+          tanggal: document.getElementById('tanggal').value,
+          noPO: document.getElementById('noPO').value,
+          pelanggan: document.getElementById('pelanggan').value,
+          bahan: document.getElementById('bahan').value,
+          qty: document.getElementById('qty').value,
+          pekerja: document.getElementById('pekerja').value,
+          status: document.getElementById('status').value
+        };
+
+        fetch(API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(() => {
+          alertBox.className = "alert alert-success";
+          alertBox.innerText = "✅ Data Order PO Berhasil Disimpan!";
+          alertBox.classList.remove('d-none');
+          
+          // Reset form input
+          document.getElementById('formPO').reset();
+          document.getElementById('tanggal').valueAsDate = new Date();
+          
+          btn.disabled = false;
+          btn.innerHTML = '🚀 Simpan Order ke Database';
+        })
+        .catch(error => {
+          alertBox.className = "alert alert-danger";
+          alertBox.innerText = "❌ Gagal menyimpan data: " + error;
+          alertBox.classList.remove('d-none');
+          
+          btn.disabled = false;
+          btn.innerHTML = '🚀 Simpan Order ke Database';
+        });
+      });
+    </script>
 </body>
 </html>
