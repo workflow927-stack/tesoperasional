@@ -139,7 +139,6 @@
         display: block;
       }
 
-      /* Animasi Refreshing */
       .spin-icon {
         animation: spin 0.8s linear infinite;
       }
@@ -174,7 +173,6 @@
                     <small class="text-muted fw-semibold" style="font-size: 0.65rem;">Sistem Percetakan Modern</small>
                 </div>
             </div>
-            <!-- Tombol Refresh dengan Indikator Putar -->
             <button id="btnRefresh" onclick="loadDashboardData(true)" class="btn btn-sm btn-light border fw-bold px-2.5 py-1 rounded-3 bg-white" style="font-size:0.75rem;">
                 <i id="iconRefresh" class="bi bi-arrow-clockwise text-primary me-1"></i> <span id="textRefresh">Refresh</span>
             </button>
@@ -185,7 +183,7 @@
 
         <!-- NOTIFIKASI TOAST REFRESH -->
         <div id="toastNotif" class="alert alert-info border-0 shadow-sm rounded-3 d-none py-2 px-3 small mb-2 text-center" role="alert">
-            <i class="bi bi-check-circle-fill me-1 text-success"></i> Data berhasil diperbarui!
+            <i class="bi bi-check-circle-fill me-1 text-success"></i> Data berhasil disinkronkan!
         </div>
 
         <!-- ALERT STOK CRITICAL -->
@@ -426,6 +424,7 @@
     <script>
       let globalTarifMap = {};
       let globalOrdersData = [];
+      let globalStokData = [];
 
       function switchTab(pageId, pageTitle, element) {
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
@@ -462,8 +461,29 @@
       document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('tanggal').valueAsDate = new Date();
         document.getElementById('modalTanggalIn').valueAsDate = new Date();
+        
+        // 🚀 Buka data cepat dari memori cache HP
+        loadFromCache();
+        
+        // Ambil data terbaru di background
         loadDashboardData(false);
       });
+
+      function saveToCache(data) {
+        try {
+          localStorage.setItem("pf_app_cache", JSON.stringify(data));
+        } catch(e){}
+      }
+
+      function loadFromCache() {
+        try {
+          const cached = localStorage.getItem("pf_app_cache");
+          if(cached) {
+            const res = JSON.parse(cached);
+            renderAllData(res);
+          }
+        } catch(e){}
+      }
 
       function onBahanSelected() {
         const selected = document.getElementById('bahanSelect').value;
@@ -480,10 +500,6 @@
         const btn = document.getElementById('btnSimpan');
         const alertBox = document.getElementById('alertBox');
         
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
-        alertBox.classList.add('d-none');
-
         const payload = {
           tanggal: document.getElementById('tanggal').value,
           noPO: document.getElementById('noPO').value,
@@ -491,12 +507,23 @@
           bahan: document.getElementById('bahanSelect').value,
           oz: document.getElementById('ozInput').value,
           jenis: document.getElementById('jenisInput').value,
-          qty: document.getElementById('qty').value,
-          tarif: document.getElementById('tarif').value,
+          qty: Number(document.getElementById('qty').value),
+          tarif: Number(document.getElementById('tarif').value),
+          totalUpah: Number(document.getElementById('qty').value) * Number(document.getElementById('tarif').value),
           pekerja: document.getElementById('pekerja').value,
           status: document.getElementById('status').value
         };
 
+        // 🚀 INSTANT UPDATE UI
+        globalOrdersData.push(payload);
+        renderAllData({ orders: globalOrdersData, stok: globalStokData, tarif: Object.keys(globalTarifMap).map(k => ({namaBahan:k, tarif:globalTarifMap[k]})) });
+
+        alertBox.className = "alert alert-success d-block rounded-3";
+        alertBox.innerText = "✅ Order PO Berhasil Disimpan!";
+        document.getElementById('formPO').reset();
+        document.getElementById('tanggal').valueAsDate = new Date();
+
+        // Latar Belakang Kirim ke Google
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -505,21 +532,8 @@
         .then(res => res.json())
         .then(res => {
           if(res.status === "success") {
-            alertBox.className = "alert alert-success d-block rounded-3";
-            alertBox.innerText = "✅ Order PO Berhasil Disimpan!";
-            
-            document.getElementById('formPO').reset();
-            document.getElementById('tanggal').valueAsDate = new Date();
             loadDashboardData(false);
-          } else { throw new Error(res.message); }
-          btn.disabled = false;
-          btn.innerHTML = '<i class="bi bi-save2-fill me-1.5"></i> Simpan Order PO';
-        })
-        .catch(error => {
-          alertBox.className = "alert alert-danger d-block rounded-3";
-          alertBox.innerText = "❌ Gagal: " + error.message;
-          btn.disabled = false;
-          btn.innerHTML = '<i class="bi bi-save2-fill me-1.5"></i> Simpan Order PO';
+          }
         });
       });
 
@@ -527,7 +541,6 @@
         e.preventDefault();
         const btn = document.getElementById('btnSimpanStok');
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
 
         const payload = {
           action: "addStok",
@@ -538,6 +551,10 @@
           keterangan: document.getElementById('modalKet').value
         };
 
+        const modalEl = document.getElementById('modalTambahStok');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -546,21 +563,11 @@
         .then(res => res.json())
         .then(res => {
           if(res.status === "success") {
-            const modalEl = document.getElementById('modalTambahStok');
-            const modal = bootstrap.Modal.getInstance(modalEl);
-            modal.hide();
-
             document.getElementById('formTambahStok').reset();
             document.getElementById('modalTanggalIn').valueAsDate = new Date();
             loadDashboardData(false);
-          } else { alert("Gagal: " + res.message); }
+          }
           btn.disabled = false;
-          btn.innerHTML = 'Simpan Stok In';
-        })
-        .catch(err => {
-          alert("Terjadi kesalahan sistem.");
-          btn.disabled = false;
-          btn.innerHTML = 'Simpan Stok In';
         });
       });
 
@@ -646,16 +653,7 @@
         });
       }
 
-      // FUNGSI REFRESH DATA BERSIFAT MULTI-STATUS
-      function loadDashboardData(showToast = false) {
-        const iconRefresh = document.getElementById("iconRefresh");
-        const btnRefresh = document.getElementById("btnRefresh");
-        const toastNotif = document.getElementById("toastNotif");
-
-        // Aktifkan Efek Putar pada Tombol Refresh
-        if (iconRefresh) iconRefresh.classList.add("spin-icon");
-        if (btnRefresh) btnRefresh.disabled = true;
-
+      function renderAllData(res) {
         const ordersCardsContainer = document.getElementById("orders-cards-container");
         const stokCardsContainer = document.getElementById("stok-cards-container");
         const stokOutCardsContainer = document.getElementById("stokOut-cards-container");
@@ -663,154 +661,164 @@
         const ownerTablesContainer = document.getElementById("owner-tables-container");
         const bahanSelect = document.getElementById("bahanSelect");
 
+        globalOrdersData = res.orders || [];
+        globalStokData = res.stok || [];
+
+        document.getElementById("poCountBadge").innerText = `${globalOrdersData.length} PO`;
+
+        globalTarifMap = {};
+        const curVal = bahanSelect.value;
+        bahanSelect.innerHTML = '<option value="">-- Pilih Bahan Baku --</option>';
+        if (res.tarif) {
+          res.tarif.forEach(item => {
+            globalTarifMap[item.namaBahan] = item.tarif;
+            const opt = document.createElement("option");
+            opt.value = item.namaBahan;
+            opt.textContent = `${item.namaBahan} (Rp ${item.tarif}/pcs)`;
+            bahanSelect.appendChild(opt);
+          });
+          bahanSelect.value = curVal;
+        }
+
+        // 1. Render PO
+        ordersCardsContainer.innerHTML = "";
+        if (globalOrdersData.length === 0) {
+          ordersCardsContainer.innerHTML = '<div class="text-center py-5 text-muted">Belum ada order.</div>';
+        } else {
+          [...globalOrdersData].reverse().forEach(ord => {
+            let statusBadge = "bg-warning text-dark";
+            if (ord.status === "Selesai") statusBadge = "bg-success text-white";
+            if (ord.status === "Pending") statusBadge = "bg-secondary text-white";
+
+            const card = document.createElement("div");
+            card.className = "card-custom";
+            card.innerHTML = `
+              <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                <div>
+                  <strong class="text-dark d-block fs-6">${ord.noPO}</strong>
+                  <small class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(ord.tanggal)}</small>
+                </div>
+                <select class="form-select form-select-sm border-0 fw-bold ${statusBadge} rounded-3" style="width:auto; font-size: 0.7rem; padding: 3px 10px;" onchange="updateStatus(${ord.rowNum}, this.value)">
+                  <option value="Proses" ${ord.status === 'Proses' ? 'selected' : ''}>Proses</option>
+                  <option value="Pending" ${ord.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                  <option value="Selesai" ${ord.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
+                </select>
+              </div>
+              <div class="row g-1 mb-2">
+                <div class="col-7">
+                  <small class="text-muted d-block" style="font-size:0.65rem;">PELANGGAN</small>
+                  <strong class="text-dark" style="font-size:0.85rem;">${ord.pelanggan}</strong>
+                </div>
+                <div class="col-5 text-end">
+                  <small class="text-muted d-block" style="font-size:0.65rem;">OPERATOR</small>
+                  <span class="badge bg-light text-dark border">${ord.pekerja}</span>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                <div>
+                  <span class="fw-semibold text-dark d-block" style="font-size:0.8rem;">${ord.bahan}</span>
+                  <small class="text-muted" style="font-size:0.7rem;">${Number(ord.qty).toLocaleString('id-ID')} pcs</small>
+                </div>
+                <strong class="text-primary fs-6">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</strong>
+              </div>
+            `;
+            ordersCardsContainer.appendChild(card);
+          });
+        }
+
+        // 2. Render Stok
+        stokCardsContainer.innerHTML = "";
+        const warningBox = document.getElementById("stokWarningBox");
+        const warningList = document.getElementById("stokWarningList");
+        warningList.innerHTML = "";
+        let hasWarning = false;
+
+        if(globalStokData) {
+          globalStokData.forEach(item => {
+            const isCritical = item.sisaStok < 1000;
+            if (isCritical) {
+              hasWarning = true;
+              const li = document.createElement("li");
+              li.innerHTML = `<strong>${item.namaBahan}</strong> sisa ${Number(item.sisaStok).toLocaleString('id-ID')} pcs`;
+              warningList.appendChild(li);
+            }
+
+            const sisaColor = isCritical ? 'text-danger' : 'text-success';
+
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "d-flex justify-content-between align-items-center p-2 mb-2 bg-light rounded-3";
+            itemDiv.innerHTML = `
+              <div>
+                <strong class="text-dark d-block" style="font-size:0.85rem;">${item.namaBahan}</strong>
+                <small class="text-muted" style="font-size:0.68rem;">Masuk: ${Number(item.stokAwal).toLocaleString('id-ID')} | Terpakai: ${Number(item.terpakai || 0).toLocaleString('id-ID')}</small>
+              </div>
+              <div class="text-end">
+                <span class="fw-bold ${sisaColor} fs-6">${Number(item.sisaStok).toLocaleString('id-ID')}</span>
+                <small class="text-muted d-block" style="font-size:0.65rem;">sisa pcs</small>
+              </div>
+            `;
+            stokCardsContainer.appendChild(itemDiv);
+          });
+        }
+
+        if (hasWarning) warningBox.classList.remove("d-none");
+        else warningBox.classList.add("d-none");
+
+        // 3. Pemakaian Stok
+        stokOutCardsContainer.innerHTML = "";
+        if (globalOrdersData.length > 0) {
+          [...globalOrdersData].reverse().forEach(ord => {
+            const div = document.createElement("div");
+            div.className = "d-flex justify-content-between align-items-center p-2 mb-1 border-bottom";
+            div.innerHTML = `
+              <div>
+                <strong class="text-dark d-block" style="font-size:0.82rem;">${ord.pekerja}</strong>
+                <small class="text-muted" style="font-size:0.68rem;">${ord.pelanggan} (${ord.bahan})</small>
+              </div>
+              <span class="fw-bold text-danger" style="font-size:0.85rem;">-${Number(ord.qty).toLocaleString('id-ID')} pcs</span>
+            `;
+            stokOutCardsContainer.appendChild(div);
+          });
+        } else {
+          stokOutCardsContainer.innerHTML = '<div class="text-center py-3 text-muted">Belum ada pemakaian.</div>';
+        }
+
+        // 4 & 5. Tabel Excel
+        renderOperatorExcelTables(gajiTablesContainer, globalOrdersData);
+        renderOperatorExcelTables(ownerTablesContainer, globalOrdersData);
+
+        let grandTotalQty = globalOrdersData.reduce((sum, o) => sum + Number(o.qty || 0), 0);
+        let grandTotalUpah = globalOrdersData.reduce((sum, o) => sum + Number(o.totalUpah || 0), 0);
+        let totalOpCount = [...new Set(globalOrdersData.map(o => o.pekerja ? o.pekerja.toUpperCase().trim() : "LAINNYA"))].length;
+
+        document.getElementById("ownerTotalQty").innerText = `${grandTotalQty.toLocaleString('id-ID')} pcs`;
+        document.getElementById("ownerTotalUpah").innerText = `Rp ${grandTotalUpah.toLocaleString('id-ID')}`;
+        document.getElementById("ownerTotalOperator").innerText = `${totalOpCount} Operator`;
+      }
+
+      function loadDashboardData(showToast = false) {
+        const iconRefresh = document.getElementById("iconRefresh");
+        const btnRefresh = document.getElementById("btnRefresh");
+        const toastNotif = document.getElementById("toastNotif");
+
+        if (iconRefresh) iconRefresh.classList.add("spin-icon");
+        if (btnRefresh) btnRefresh.disabled = true;
+
         fetch(API_URL)
           .then(response => response.json())
           .then(res => {
             if (res.status === "success") {
-              
-              globalOrdersData = res.orders || [];
+              saveToCache(res);
+              renderAllData(res);
 
-              document.getElementById("poCountBadge").innerText = `${globalOrdersData.length} PO`;
-
-              globalTarifMap = {};
-              bahanSelect.innerHTML = '<option value="">-- Pilih Bahan Baku --</option>';
-              if (res.tarif) {
-                res.tarif.forEach(item => {
-                  globalTarifMap[item.namaBahan] = item.tarif;
-                  const opt = document.createElement("option");
-                  opt.value = item.namaBahan;
-                  opt.textContent = `${item.namaBahan} (Rp ${item.tarif}/pcs)`;
-                  bahanSelect.appendChild(opt);
-                });
-              }
-
-              // 1. Render Order PO
-              ordersCardsContainer.innerHTML = "";
-              if (res.orders.length === 0) {
-                ordersCardsContainer.innerHTML = '<div class="text-center py-5 text-muted">Belum ada order.</div>';
-              } else {
-                [...res.orders].reverse().forEach(ord => {
-                  let statusBadge = "bg-warning text-dark";
-                  if (ord.status === "Selesai") statusBadge = "bg-success text-white";
-                  if (ord.status === "Pending") statusBadge = "bg-secondary text-white";
-
-                  const card = document.createElement("div");
-                  card.className = "card-custom";
-                  card.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
-                      <div>
-                        <strong class="text-dark d-block fs-6">${ord.noPO}</strong>
-                        <small class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(ord.tanggal)}</small>
-                      </div>
-                      <select class="form-select form-select-sm border-0 fw-bold ${statusBadge} rounded-3" style="width:auto; font-size: 0.7rem; padding: 3px 10px;" onchange="updateStatus(${ord.rowNum}, this.value)">
-                        <option value="Proses" ${ord.status === 'Proses' ? 'selected' : ''}>Proses</option>
-                        <option value="Pending" ${ord.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                        <option value="Selesai" ${ord.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
-                      </select>
-                    </div>
-                    <div class="row g-1 mb-2">
-                      <div class="col-7">
-                        <small class="text-muted d-block" style="font-size:0.65rem;">PELANGGAN</small>
-                        <strong class="text-dark" style="font-size:0.85rem;">${ord.pelanggan}</strong>
-                      </div>
-                      <div class="col-5 text-end">
-                        <small class="text-muted d-block" style="font-size:0.65rem;">OPERATOR</small>
-                        <span class="badge bg-light text-dark border">${ord.pekerja}</span>
-                      </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                      <div>
-                        <span class="fw-semibold text-dark d-block" style="font-size:0.8rem;">${ord.bahan}</span>
-                        <small class="text-muted" style="font-size:0.7rem;">${ord.qty.toLocaleString('id-ID')} pcs</small>
-                      </div>
-                      <strong class="text-primary fs-6">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</strong>
-                    </div>
-                  `;
-                  ordersCardsContainer.appendChild(card);
-                });
-              }
-
-              // 2. Render Sisa Stok
-              stokCardsContainer.innerHTML = "";
-              const warningBox = document.getElementById("stokWarningBox");
-              const warningList = document.getElementById("stokWarningList");
-              warningList.innerHTML = "";
-              let hasWarning = false;
-
-              res.stok.forEach(item => {
-                const isCritical = item.sisaStok < 1000;
-                if (isCritical) {
-                  hasWarning = true;
-                  const li = document.createElement("li");
-                  li.innerHTML = `<strong>${item.namaBahan}</strong> sisa ${Number(item.sisaStok).toLocaleString('id-ID')} pcs`;
-                  warningList.appendChild(li);
-                }
-
-                const sisaColor = isCritical ? 'text-danger' : 'text-success';
-
-                const itemDiv = document.createElement("div");
-                itemDiv.className = "d-flex justify-content-between align-items-center p-2 mb-2 bg-light rounded-3";
-                itemDiv.innerHTML = `
-                  <div>
-                    <strong class="text-dark d-block" style="font-size:0.85rem;">${item.namaBahan}</strong>
-                    <small class="text-muted" style="font-size:0.68rem;">Masuk: ${Number(item.stokAwal).toLocaleString('id-ID')} | Terpakai: ${Number(item.terpakai || 0).toLocaleString('id-ID')}</small>
-                  </div>
-                  <div class="text-end">
-                    <span class="fw-bold ${sisaColor} fs-6">${Number(item.sisaStok).toLocaleString('id-ID')}</span>
-                    <small class="text-muted d-block" style="font-size:0.65rem;">sisa pcs</small>
-                  </div>
-                `;
-                stokCardsContainer.appendChild(itemDiv);
-              });
-
-              if (hasWarning) warningBox.classList.remove("d-none");
-              else warningBox.classList.add("d-none");
-
-              // 3. Pemakaian Stok per Operator
-              stokOutCardsContainer.innerHTML = "";
-              if (res.orders && res.orders.length > 0) {
-                [...res.orders].reverse().forEach(ord => {
-                  const div = document.createElement("div");
-                  div.className = "d-flex justify-content-between align-items-center p-2 mb-1 border-bottom";
-                  div.innerHTML = `
-                    <div>
-                      <strong class="text-dark d-block" style="font-size:0.82rem;">${ord.pekerja}</strong>
-                      <small class="text-muted" style="font-size:0.68rem;">${ord.pelanggan} (${ord.bahan})</small>
-                    </div>
-                    <span class="fw-bold text-danger" style="font-size:0.85rem;">-${Number(ord.qty).toLocaleString('id-ID')} pcs</span>
-                  `;
-                  stokOutCardsContainer.appendChild(div);
-                });
-              } else {
-                stokOutCardsContainer.innerHTML = '<div class="text-center py-3 text-muted">Belum ada pemakaian.</div>';
-              }
-
-              // 4 & 5. Render Rekap Gaji & Owner
-              renderOperatorExcelTables(gajiTablesContainer, res.orders);
-              renderOperatorExcelTables(ownerTablesContainer, res.orders);
-
-              let grandTotalQty = res.orders.reduce((sum, o) => sum + Number(o.qty || 0), 0);
-              let grandTotalUpah = res.orders.reduce((sum, o) => sum + Number(o.totalUpah || 0), 0);
-              let totalOpCount = [...new Set(res.orders.map(o => o.pekerja ? o.pekerja.toUpperCase().trim() : "LAINNYA"))].length;
-
-              document.getElementById("ownerTotalQty").innerText = `${grandTotalQty.toLocaleString('id-ID')} pcs`;
-              document.getElementById("ownerTotalUpah").innerText = `Rp ${grandTotalUpah.toLocaleString('id-ID')}`;
-              document.getElementById("ownerTotalOperator").innerText = `${totalOpCount} Operator`;
-
-              // Tampilkan Toast jika tombol ditekan manual
               if (showToast && toastNotif) {
                 toastNotif.classList.remove("d-none");
-                setTimeout(() => toastNotif.classList.add("d-none"), 2500);
+                setTimeout(() => toastNotif.classList.add("d-none"), 2000);
               }
-
             }
           })
-          .catch(err => {
-            console.error("Koneksi gagal:", err);
-            alert("Gagal memperbarui data. Periksa jaringan Anda.");
-          })
+          .catch(err => console.error(err))
           .finally(() => {
-            // Hentikan Efek Putar pada Tombol Refresh
             if (iconRefresh) iconRefresh.classList.remove("spin-icon");
             if (btnRefresh) btnRefresh.disabled = false;
           });
@@ -825,7 +833,6 @@
         .then(res => res.json())
         .then(res => {
           if (res.status === "success") loadDashboardData(false);
-          else alert("Gagal update status.");
         });
       }
 
