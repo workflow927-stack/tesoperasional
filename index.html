@@ -14,8 +14,11 @@
 
     <!-- Navbar -->
     <nav class="navbar navbar-dark bg-primary mb-4 shadow-sm">
-        <div class="container">
+        <div class="container d-flex justify-content-between">
             <span class="navbar-brand mb-0 h1">📦 Sistem Percetakan Sablon</span>
+            <button class="btn btn-light btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
+                📥 Input Stok In (Barang Masuk)
+            </button>
         </div>
     </nav>
 
@@ -23,6 +26,12 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 
+                <!-- ALERT WARNING STOK MENIPIS -->
+                <div id="stokWarningBox" class="alert alert-danger d-none shadow-sm mb-4" role="alert">
+                    <h6 class="fw-bold mb-1">⚠️ Perhatian: Stok Bahan Baku Menipis!</h6>
+                    <ul id="stokWarningList" class="mb-0 ps-3"></ul>
+                </div>
+
                 <!-- BAGIAN 1: FORM INPUT ORDER PO -->
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white py-3">
@@ -34,31 +43,37 @@
                         <form id="formPO">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label font-weight-bold">Tanggal Pesanan</label>
+                                    <label class="form-label fw-semibold">Tanggal Pesanan</label>
                                     <input type="date" class="form-control" id="tanggal" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">No. PO / Invoice</label>
+                                    <label class="form-label fw-semibold">No. PO / Invoice</label>
                                     <input type="text" class="form-control" id="noPO" placeholder="Contoh: PO-001" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Nama Pelanggan</label>
+                                    <label class="form-label fw-semibold">Nama Pelanggan</label>
                                     <input type="text" class="form-control" id="pelanggan" placeholder="Nama Pelanggan / Toko" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Bahan / Jenis Cup</label>
-                                    <input type="text" class="form-control" id="bahan" placeholder="Contoh: Cup 16oz Oval" required>
+                                    <label class="form-label fw-semibold">Pilih Bahan Baku</label>
+                                    <select class="form-select" id="bahanSelect" onchange="onBahanSelected()" required>
+                                        <option value="">-- Pilih Bahan --</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Jumlah Order (Qty)</label>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Jumlah Order (Qty)</label>
                                     <input type="number" class="form-control" id="qty" placeholder="0" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Pekerja / Operator</label>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Tarif Sablon / Pcs (Rp)</label>
+                                    <input type="number" class="form-control bg-light" id="tarif" readonly placeholder="Otomatis">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Pekerja / Operator</label>
                                     <input type="text" class="form-control" id="pekerja" placeholder="Nama Pekerja" required>
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="form-label">Status Awal</label>
+                                    <label class="form-label fw-semibold">Status Awal</label>
                                     <select class="form-select" id="status">
                                         <option value="Proses" selected>Proses</option>
                                         <option value="Pending">Pending</option>
@@ -76,10 +91,10 @@
                     </div>
                 </div>
 
-                <!-- BAGIAN 2: DAFTAR RIWAYAT ORDER PO & EDIT STATUS -->
+                <!-- BAGIAN 2: DAFTAR RIWAYAT ORDER PO -->
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">📋 Riwayat Order PO</h5>
+                        <h5 class="card-title mb-0 fw-bold">📋 Riwayat Order PO (Stok Keluar)</h5>
                         <button onclick="loadDashboardData()" class="btn btn-sm btn-outline-primary fw-bold">🔄 Refresh</button>
                     </div>
                     <div class="card-body p-0">
@@ -92,8 +107,8 @@
                                         <th>Pelanggan</th>
                                         <th>Bahan</th>
                                         <th class="text-end">Qty</th>
-                                        <th>Pekerja</th>
-                                        <th class="text-center pe-3">Status / Aksi</th>
+                                        <th>Upah Pekerja</th>
+                                        <th class="text-center pe-3">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody id="orders-body">
@@ -106,12 +121,12 @@
 
                 <!-- BAGIAN 3 & 4: MONITORING STOK & GAJI -->
                 <div class="row">
-                    <!-- MONITORING STOK -->
+                    <!-- STOK GUDANG & RIWAYAT STOK IN -->
                     <div class="col-md-6 mb-4">
-                        <div class="card shadow-sm border-0 h-100">
+                        <div class="card shadow-sm border-0 mb-4">
                             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                                <h5 class="card-title mb-0 fw-bold">📦 Stok Gudang</h5>
-                                <button onclick="loadDashboardData()" class="btn btn-sm btn-outline-primary fw-bold">🔄 Refresh</button>
+                                <h5 class="card-title mb-0 fw-bold">📦 Ringkasan Stok Gudang</h5>
+                                <button class="btn btn-sm btn-outline-success fw-bold" data-bs-toggle="modal" data-bs-target="#modalTambahStok">📥 Stok In</button>
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
@@ -119,8 +134,8 @@
                                         <thead class="table-light">
                                             <tr>
                                                 <th class="ps-3">Bahan</th>
-                                                <th class="text-end">Stok</th>
-                                                <th class="text-end pe-3">Sisa</th>
+                                                <th class="text-end">Total Masuk</th>
+                                                <th class="text-end pe-3">Sisa Stok</th>
                                             </tr>
                                         </thead>
                                         <tbody id="stok-body">
@@ -130,9 +145,33 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- TABEL RIWAYAT STOK IN -->
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-white py-3">
+                                <h6 class="card-title mb-0 fw-bold">📥 Riwayat Stok In (Masuk)</h6>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                                    <table class="table table-sm table-hover align-middle mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th class="ps-3">Tanggal</th>
+                                                <th>Bahan</th>
+                                                <th class="text-end">Qty</th>
+                                                <th class="pe-3">Ket</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stokIn-body">
+                                            <tr><td colspan="4" class="text-center py-2 text-muted">Belum ada stok masuk.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- REKAP GAJI -->
+                    <!-- REKAP GAJI PEKERJA -->
                     <div class="col-md-6 mb-4">
                         <div class="card shadow-sm border-0 h-100">
                             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -163,14 +202,69 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIKA PEMROSESAN DATA -->
+    <!-- MODAL INPUT STOK IN (BARANG MASUK / RESTOK) -->
+    <div class="modal fade" id="modalTambahStok" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold">📥 Input Stok In (Barang Masuk / Restok)</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="formTambahStok">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Tanggal Masuk</label>
+                    <input type="date" class="form-control" id="modalTanggalIn" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Nama Bahan Baku / Cup</label>
+                    <input type="text" class="form-control" id="modalNamaBahan" placeholder="Contoh: Cup 16oz Oval" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Jumlah Masuk (Pcs)</label>
+                    <input type="number" class="form-control" id="modalStokAwal" placeholder="10000" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Tarif Upah Sablon / Pcs (Rp)</label>
+                    <input type="number" class="form-control" id="modalTarif" placeholder="55" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Keterangan / Suplier</label>
+                    <input type="text" class="form-control" id="modalKet" placeholder="Contoh: Beli dari Toko Plastik A">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" id="btnSimpanStok" class="btn btn-success fw-bold">Simpan Stok In</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SCRIPT LOGIKA SIMPAN & DASHBOARD -->
     <script>
+      let globalTarifMap = {};
+
       document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('tanggal').valueAsDate = new Date();
+        document.getElementById('modalTanggalIn').valueAsDate = new Date();
         loadDashboardData();
       });
 
-      // Submit Form PO Baru
+      function onBahanSelected() {
+        const selected = document.getElementById('bahanSelect').value;
+        const tarifInput = document.getElementById('tarif');
+        if (selected && globalTarifMap[selected] !== undefined) {
+          tarifInput.value = globalTarifMap[selected];
+        } else {
+          tarifInput.value = "";
+        }
+      }
+
+      // Submit Order PO
       document.getElementById('formPO').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('btnSimpan');
@@ -184,8 +278,9 @@
           tanggal: document.getElementById('tanggal').value,
           noPO: document.getElementById('noPO').value,
           pelanggan: document.getElementById('pelanggan').value,
-          bahan: document.getElementById('bahan').value,
+          bahan: document.getElementById('bahanSelect').value,
           qty: document.getElementById('qty').value,
+          tarif: document.getElementById('tarif').value,
           pekerja: document.getElementById('pekerja').value,
           status: document.getElementById('status').value
         };
@@ -195,11 +290,11 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         })
-        .then(response => response.json())
+        .then(res => res.json())
         .then(res => {
           if(res.status === "success") {
             alertBox.className = "alert alert-success";
-            alertBox.innerText = "✅ Data Order PO Berhasil Disimpan!";
+            alertBox.innerText = "✅ Order PO Berhasil Disimpan!";
             alertBox.classList.remove('d-none');
             
             document.getElementById('formPO').reset();
@@ -211,49 +306,95 @@
         })
         .catch(error => {
           alertBox.className = "alert alert-danger";
-          alertBox.innerText = "❌ Gagal menyimpan data: " + error.message;
+          alertBox.innerText = "❌ Gagal menyimpan: " + error.message;
           alertBox.classList.remove('d-none');
           btn.disabled = false;
           btn.innerHTML = '🚀 Simpan Order ke Database';
         });
       });
 
-      // Ambil Semua Data Dashboard (PO, Stok, Gaji)
+      // Submit Form Stok In
+      document.getElementById('formTambahStok').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSimpanStok');
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Menyimpan...';
+
+        const payload = {
+          action: "addStok",
+          tanggal: document.getElementById('modalTanggalIn').value,
+          namaBahan: document.getElementById('modalNamaBahan').value,
+          stokAwal: document.getElementById('modalStokAwal').value,
+          tarif: document.getElementById('modalTarif').value,
+          keterangan: document.getElementById('modalKet').value
+        };
+
+        fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(res => {
+          if(res.status === "success") {
+            const modalEl = document.getElementById('modalTambahStok');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+
+            document.getElementById('formTambahStok').reset();
+            document.getElementById('modalTanggalIn').valueAsDate = new Date();
+            loadDashboardData();
+          } else { alert("Gagal: " + res.message); }
+          btn.disabled = false;
+          btn.innerHTML = 'Simpan Stok In';
+        })
+        .catch(err => {
+          alert("Terjadi kesalahan sistem.");
+          btn.disabled = false;
+          btn.innerHTML = 'Simpan Stok In';
+        });
+      });
+
+      // Load Data
       function loadDashboardData() {
         const tbodyOrders = document.getElementById("orders-body");
         const tbodyStok = document.getElementById("stok-body");
+        const tbodyStokIn = document.getElementById("stokIn-body");
         const tbodyGaji = document.getElementById("gaji-body");
+        const bahanSelect = document.getElementById("bahanSelect");
         
-        tbodyOrders.innerHTML = '<tr><td colspan="7" class="text-center py-3 text-muted">🔄 Memuat data...</td></tr>';
-        tbodyStok.innerHTML = '<tr><td colspan="3" class="text-center py-3 text-muted">🔄 Memuat...</td></tr>';
-        tbodyGaji.innerHTML = '<tr><td colspan="3" class="text-center py-3 text-muted">🔄 Memuat...</td></tr>';
-
         fetch(API_URL)
           .then(response => response.json())
           .then(res => {
             if (res.status === "success") {
               
-              // 1. Render Tabel Riwayat PO
+              // 1. Dropdown Bahan
+              globalTarifMap = {};
+              bahanSelect.innerHTML = '<option value="">-- Pilih Bahan Baku --</option>';
+              if (res.tarif) {
+                res.tarif.forEach(item => {
+                  globalTarifMap[item.namaBahan] = item.tarif;
+                  const opt = document.createElement("option");
+                  opt.value = item.namaBahan;
+                  opt.textContent = `${item.namaBahan} (Rp ${item.tarif}/pcs)`;
+                  bahanSelect.appendChild(opt);
+                });
+              }
+
+              // 2. Order PO
               tbodyOrders.innerHTML = "";
               if (res.orders.length === 0) {
                 tbodyOrders.innerHTML = '<tr><td colspan="7" class="text-center py-3 text-muted">Belum ada order.</td></tr>';
               } else {
-                // Tampilkan order terbaru di paling atas
                 res.orders.reverse().forEach(ord => {
                   const row = document.createElement("tr");
-                  
-                  // Warna Badge Status
-                  let badgeClass = "bg-warning text-dark";
-                  if (ord.status === "Selesai") badgeClass = "bg-success";
-                  if (ord.status === "Pending") badgeClass = "bg-secondary";
-
                   row.innerHTML = `
                     <td class="ps-3 fw-bold">${ord.noPO}</td>
                     <td>${ord.tanggal}</td>
                     <td>${ord.pelanggan}</td>
                     <td>${ord.bahan}</td>
                     <td class="text-end fw-semibold">${Number(ord.qty).toLocaleString('id-ID')}</td>
-                    <td>${ord.pekerja}</td>
+                    <td class="fw-semibold text-primary">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')} (${ord.pekerja})</td>
                     <td class="text-center pe-3">
                       <select class="form-select form-select-sm d-inline-block w-auto" onchange="updateStatus(${ord.rowNum}, this.value)">
                         <option value="Proses" ${ord.status === 'Proses' ? 'selected' : ''}>Proses</option>
@@ -266,22 +407,55 @@
                 });
               }
 
-              // 2. Render Tabel Stok
+              // 3. Ringkasan Stok Gudang & Warning
               tbodyStok.innerHTML = "";
+              const warningBox = document.getElementById("stokWarningBox");
+              const warningList = document.getElementById("stokWarningList");
+              warningList.innerHTML = "";
+              let hasWarning = false;
+
               res.stok.forEach(item => {
                 const row = document.createElement("tr");
                 const isCritical = item.sisaStok < 1000;
+                
+                if (isCritical) {
+                  hasWarning = true;
+                  const li = document.createElement("li");
+                  li.innerHTML = `Bahan <strong>${item.namaBahan}</strong> sisa <strong>${Number(item.sisaStok).toLocaleString('id-ID')} pcs</strong>`;
+                  warningList.appendChild(li);
+                }
+
                 const badgeStyle = isCritical ? 'class="text-end pe-3 fw-bold text-danger"' : 'class="text-end pe-3 fw-bold text-success"';
 
                 row.innerHTML = `
-                  <td class="ps-3 fw-semibold">${item.idBahan}</td>
+                  <td class="ps-3 fw-semibold">${item.namaBahan}</td>
                   <td class="text-end text-muted">${Number(item.stokAwal).toLocaleString('id-ID')}</td>
                   <td ${badgeStyle}>${Number(item.sisaStok).toLocaleString('id-ID')}</td>
                 `;
                 tbodyStok.appendChild(row);
               });
 
-              // 3. Render Tabel Gaji
+              if (hasWarning) warningBox.classList.remove("d-none");
+              else warningBox.classList.add("d-none");
+
+              // 4. Riwayat Stok In
+              tbodyStokIn.innerHTML = "";
+              if (res.stokIn && res.stokIn.length > 0) {
+                res.stokIn.reverse().forEach(stk => {
+                  const row = document.createElement("tr");
+                  row.innerHTML = `
+                    <td class="ps-3">${stk.tanggal}</td>
+                    <td class="fw-semibold">${stk.namaBahan}</td>
+                    <td class="text-end fw-bold text-success">+${Number(stk.qtyMasuk).toLocaleString('id-ID')}</td>
+                    <td class="pe-3 text-muted">${stk.ket}</td>
+                  `;
+                  tbodyStokIn.appendChild(row);
+                });
+              } else {
+                tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-2 text-muted">Belum ada stok masuk.</td></tr>';
+              }
+
+              // 5. Rekap Gaji
               tbodyGaji.innerHTML = "";
               res.gaji.forEach(item => {
                 const row = document.createElement("tr");
@@ -293,39 +467,22 @@
                 tbodyGaji.appendChild(row);
               });
 
-            } else {
-              tbodyOrders.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-3">Gagal: ${res.message}</td></tr>`;
             }
           })
-          .catch(err => {
-            console.error(err);
-            tbodyOrders.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-3">Gagal koneksi server.</td></tr>';
-          });
+          .catch(err => console.error("Koneksi gagal:", err));
       }
 
-      // Fungsi Ubah Status Order
       function updateStatus(rowNum, newStatus) {
-        const payload = {
-          action: "updateStatus",
-          rowNum: rowNum,
-          newStatus: newStatus
-        };
-
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ action: "updateStatus", rowNum: rowNum, newStatus: newStatus })
         })
         .then(res => res.json())
         .then(res => {
-          if (res.status === "success") {
-            // Refresh data agar rekap stok/gaji ikut ter-update
-            loadDashboardData();
-          } else {
-            alert("Gagal mengubah status: " + res.message);
-          }
-        })
-        .catch(err => alert("Terjadi kesalahan koneksi."));
+          if (res.status === "success") loadDashboardData();
+          else alert("Gagal update status.");
+        });
       }
     </script>
 </body>
