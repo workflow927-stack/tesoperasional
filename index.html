@@ -14,7 +14,7 @@
     <style>
       :root {
         --bs-font-sans-serif: 'Plus Jakarta Sans', sans-serif;
-        --bg-main: #f1f5f9;
+        --bg-main: #f8fafc;
         --card-border: #e2e8f0;
         --brand-primary: #2563eb;
       }
@@ -22,17 +22,17 @@
       body {
         font-family: var(--bs-font-sans-serif);
         background-color: var(--bg-main);
-        color: #0f172a;
-        padding-bottom: 75px; /* Margin agar tidak tertutup menu bawah HP */
+        color: #1e293b;
+        padding-bottom: 80px; /* Margin agar menu bawah HP tidak menutupi isi */
       }
 
-      /* Top Navbar Header */
+      /* Top Bar Navbar */
       .navbar-mobile {
         background: #ffffff;
         border-bottom: 1px solid var(--card-border);
       }
 
-      /* Navigation Bar Bawah Ala HP */
+      /* Bottom Nav Menu */
       .mobile-bottom-nav {
         position: fixed;
         bottom: 0;
@@ -42,9 +42,9 @@
         border-top: 1px solid var(--card-border);
         display: flex;
         justify-content: space-around;
-        padding: 6px 0;
+        padding: 8px 0;
         z-index: 1030;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.03);
       }
 
       .mobile-nav-item {
@@ -53,14 +53,14 @@
         background: none;
         border: none;
         color: #64748b;
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         font-weight: 600;
-        padding: 4px 0;
+        padding: 2px 0;
       }
 
       .mobile-nav-item i {
         display: block;
-        font-size: 1.25rem;
+        font-size: 1.2rem;
         margin-bottom: 2px;
       }
 
@@ -68,7 +68,7 @@
         color: var(--brand-primary);
       }
 
-      /* Card Styling */
+      /* Card & Form Styles */
       .card-app {
         background: #ffffff;
         border: 1px solid var(--card-border);
@@ -77,7 +77,7 @@
       }
 
       .card-app-header {
-        padding: 1rem;
+        padding: 0.9rem 1.1rem;
         border-bottom: 1px solid var(--card-border);
         background: #ffffff;
         border-top-left-radius: 12px;
@@ -88,17 +88,17 @@
         font-size: 0.75rem;
         font-weight: 700;
         color: #475569;
-        text-transform: uppercase;
+        margin-bottom: 0.3rem;
       }
 
       .form-control, .form-select {
         border-radius: 8px;
         border: 1px solid #cbd5e1;
-        padding: 0.6rem 0.75rem;
+        padding: 0.65rem 0.85rem;
         font-size: 0.9rem;
       }
 
-      /* Multi-page Display Logics */
+      /* Page Display Logic */
       .page-section {
         display: none;
       }
@@ -106,18 +106,30 @@
         display: block;
       }
 
-      /* Table Styles for Mobile */
+      /* Table Styles - Clean Typography */
       .table-app th {
-        font-size: 0.7rem;
+        font-size: 0.72rem;
         text-transform: uppercase;
+        letter-spacing: 0.03em;
         color: #64748b;
         background: #f8fafc;
-        padding: 0.6rem 0.75rem;
+        padding: 0.75rem 0.85rem;
+        border-bottom: 1px solid var(--card-border);
       }
       .table-app td {
-        padding: 0.75rem;
-        font-size: 0.85rem;
+        padding: 0.85rem;
+        font-size: 0.875rem;
         vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+      }
+
+      /* Owner Stat Cards */
+      .stat-card {
+        padding: 1rem;
+        border-radius: 10px;
+        background: #ffffff;
+        border: 1px solid var(--card-border);
       }
 
       @media print {
@@ -134,16 +146,19 @@
       const API_URL = "https://script.google.com/macros/s/AKfycbw1u9cDQdcmd7xmbfxa_D9y28YVFPy6G0hWNJTZvzcR1GTgtSWvCrgUAut9f51WlowP/exec";
     </script>
 
-    <!-- Top Bar -->
-    <nav class="navbar navbar-mobile sticky-top px-3 py-2 no-print">
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-mobile sticky-top px-3 py-2.5 no-print">
         <div class="container-fluid d-flex justify-content-between align-items-center p-0">
             <div class="d-flex align-items-center gap-2">
-                <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:34px; height:34px;">
+                <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:36px; height:36px;">
                     <i class="bi bi-printer-fill fs-6"></i>
                 </div>
-                <h6 class="fw-bold mb-0 text-dark" id="pageTitleHeader">Input Order PO</h6>
+                <div>
+                    <h6 class="fw-bold mb-0 text-dark" id="pageTitleHeader">Input Order PO</h6>
+                    <small class="text-muted" style="font-size: 0.7rem;">Sistem Operasional Percetakan</small>
+                </div>
             </div>
-            <button onclick="loadDashboardData()" class="btn btn-sm btn-light border fw-semibold">
+            <button onclick="loadDashboardData()" class="btn btn-sm btn-light border fw-semibold px-2.5 py-1.5">
                 <i class="bi bi-arrow-clockwise"></i>
             </button>
         </div>
@@ -154,8 +169,8 @@
         <!-- ALERT STOK CRITICAL -->
         <div id="stokWarningBox" class="alert alert-danger border-0 shadow-sm rounded-3 d-none mb-3" role="alert">
             <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-exclamation-triangle-fill"></i>
-                <strong class="small">Stok Bahan Menipis!</strong>
+                <i class="bi bi-exclamation-triangle-fill fs-6"></i>
+                <strong class="small">Perhatian: Stok Bahan Baku Menipis!</strong>
             </div>
             <ul id="stokWarningList" class="mb-0 mt-1 ps-3 small"></ul>
         </div>
@@ -164,45 +179,46 @@
         <div id="page-input-po" class="page-section active-page">
             <div class="card-app">
                 <div class="card-app-header">
-                    <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-plus-circle me-1"></i> Form Input Order Pesanan (PO)</h6>
+                    <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-plus-circle me-1.5"></i> Form Input Order Pesanan (PO)</h6>
                 </div>
                 <div class="card-body p-3">
                     <div id="alertBox" class="alert d-none rounded-3 py-2 px-3 small mb-3"></div>
 
                     <form id="formPO">
-                        <div class="row g-2">
+                        <div class="row g-2.5">
                             <div class="col-6">
-                                <label class="form-label">Tanggal</label>
+                                <label class="form-label">TANGGAL</label>
                                 <input type="date" class="form-control" id="tanggal" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">No. PO / Invoice</label>
+                                <label class="form-label">NO. PO / INVOICE</label>
                                 <input type="text" class="form-control" id="noPO" placeholder="PO-001" required>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Nama Pelanggan / Toko</label>
+                                <label class="form-label">NAMA PELANGGAN / TOKO</label>
                                 <input type="text" class="form-control" id="pelanggan" placeholder="Nama Pemesan" required>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Bahan Baku / Cup</label>
+                                <label class="form-label">PILIH BAHAN BAKU</label>
                                 <select class="form-select" id="bahanSelect" onchange="onBahanSelected()" required>
-                                    <option value="">-- Pilih Bahan --</option>
+                                    <option value="">-- Pilih Bahan Baku --</option>
                                 </select>
+                                <small class="text-muted" style="font-size:0.7rem;">*Isi bahan baku lewat menu Stok In jika belum ada</small>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">Jumlah Order (Qty)</label>
+                                <label class="form-label">JUMLAH ORDER (QTY)</label>
                                 <input type="number" class="form-control" id="qty" placeholder="0" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">Tarif (Rp/pcs)</label>
+                                <label class="form-label">TARIF (RP/PCS)</label>
                                 <input type="number" class="form-control bg-light" id="tarif" readonly placeholder="Otomatis">
                             </div>
                             <div class="col-6">
-                                <label class="form-label">Operator / Pekerja</label>
+                                <label class="form-label">OPERATOR / PEKERJA</label>
                                 <input type="text" class="form-control" id="pekerja" placeholder="Nama Pekerja" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">Status Awal</label>
+                                <label class="form-label">STATUS AWAL</label>
                                 <select class="form-select" id="status">
                                     <option value="Proses" selected>Proses</option>
                                     <option value="Pending">Pending</option>
@@ -223,7 +239,7 @@
             <div class="card-app">
                 <div class="card-app-header d-flex justify-content-between align-items-center">
                     <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-receipt me-1"></i> Riwayat Pesanan PO</h6>
-                    <span class="badge bg-primary rounded-pill" id="poCountBadge">0</span>
+                    <span class="badge bg-primary rounded-pill" id="poCountBadge">0 PO</span>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -237,7 +253,7 @@
                                 </tr>
                             </thead>
                             <tbody id="orders-body">
-                                <tr><td colspan="4" class="text-center py-4 text-muted">Memuat data...</td></tr>
+                                <tr><td colspan="4" class="text-center py-4 text-muted">Memuat data order...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -265,8 +281,8 @@
                                 <tr>
                                     <th class="ps-3">Nama Bahan</th>
                                     <th class="text-end">Masuk</th>
-                                    <th class="text-end">Pakai</th>
-                                    <th class="text-end pe-3">Sisa</th>
+                                    <th class="text-end">Terpakai</th>
+                                    <th class="text-end pe-3">Sisa Stok</th>
                                 </tr>
                             </thead>
                             <tbody id="stok-body">
@@ -306,7 +322,7 @@
         <div id="page-gaji" class="page-section">
             <div class="card-app">
                 <div class="card-app-header">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-people me-1 text-primary"></i> Rekap Upah Operator</h6>
+                    <h6 class="fw-bold mb-0"><i class="bi bi-wallet2 me-1 text-primary"></i> Rekap Upah Operator</h6>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -328,6 +344,47 @@
             </div>
         </div>
 
+        <!-- ================= HALAMAN 5: LAPORAN OWNER (BARU) ================= -->
+        <div id="page-owner" class="page-section">
+            <div class="row g-2 mb-3">
+                <div class="col-6">
+                    <div class="stat-card">
+                        <small class="text-muted fw-semibold" style="font-size: 0.7rem;">TOTAL PRODUKSI</small>
+                        <h5 class="fw-bold mb-0 mt-1 text-primary" id="ownerTotalQty">0 pcs</h5>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-card">
+                        <small class="text-muted fw-semibold" style="font-size: 0.7rem;">TOTAL UPAH OUT</small>
+                        <h5 class="fw-bold mb-0 mt-1 text-success" id="ownerTotalUpah">Rp 0</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-app mb-3">
+                <div class="card-app-header d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-fill text-primary me-1.5"></i> Performa Hasil Pekerja</h6>
+                    <span class="badge bg-light text-dark border fw-normal" id="ownerTotalOperator">0 Operator</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-app align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="ps-3">Operator</th>
+                                    <th class="text-end">Hasil Barang</th>
+                                    <th class="text-end pe-3">Total Upah</th>
+                                </tr>
+                            </thead>
+                            <tbody id="owner-body">
+                                <tr><td colspan="3" class="text-center py-4 text-muted">Memuat rekap...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- NAVBAR BOTTOM UNTUK HP -->
@@ -340,13 +397,17 @@
             <i class="bi bi-receipt-cutoff"></i>
             <span>Data PO</span>
         </button>
-        <button class="mobile-nav-item" onclick="switchTab('stok', 'Manajemen Stok Gudang', this)">
+        <button class="mobile-nav-item" onclick="switchTab('stok', 'Stok Gudang', this)">
             <i class="bi bi-boxes"></i>
-            <span>Stok Gudang</span>
+            <span>Stok</span>
         </button>
-        <button class="mobile-nav-item" onclick="switchTab('gaji', 'Rekap Gaji Pekerja', this)">
+        <button class="mobile-nav-item" onclick="switchTab('gaji', 'Gaji Pekerja', this)">
             <i class="bi bi-wallet2"></i>
-            <span>Gaji Pekerja</span>
+            <span>Gaji</span>
+        </button>
+        <button class="mobile-nav-item" onclick="switchTab('owner', 'Laporan Ringkasan Owner', this)">
+            <i class="bi bi-bar-chart-line-fill"></i>
+            <span>Owner</span>
         </button>
     </div>
 
@@ -355,31 +416,31 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
           <div class="modal-header border-0 pb-0">
-            <h6 class="modal-title fw-bold fs-6"><i class="bi bi-box-arrow-in-down text-success me-1"></i> Input Stok In</h6>
+            <h6 class="modal-title fw-bold fs-6"><i class="bi bi-box-arrow-in-down text-success me-1"></i> Input Stok In (Barang Masuk)</h6>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form id="formTambahStok">
             <div class="modal-body py-3">
-                <div class="row g-2">
+                <div class="row g-2.5">
                     <div class="col-12">
-                        <label class="form-label">Tanggal Masuk</label>
+                        <label class="form-label">TANGGAL MASUK</label>
                         <input type="date" class="form-control" id="modalTanggalIn" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">Nama Bahan Baku / Cup</label>
+                        <label class="form-label">NAMA BAHAN BAKU / CUP</label>
                         <input type="text" class="form-control" id="modalNamaBahan" placeholder="Contoh: Cup 16oz Oval" required>
                     </div>
                     <div class="col-6">
-                        <label class="form-label">Jumlah Masuk (Pcs)</label>
+                        <label class="form-label">JUMLAH MASUK (PCS)</label>
                         <input type="number" class="form-control" id="modalStokAwal" placeholder="10000" required>
                     </div>
                     <div class="col-6">
-                        <label class="form-label">Tarif Upah/Pcs (Rp)</label>
+                        <label class="form-label">TARIF UPAH/PCS (RP)</label>
                         <input type="number" class="form-control" id="modalTarif" placeholder="55" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">Keterangan / Suplier</label>
-                        <input type="text" class="form-control" id="modalKet" placeholder="Suplier / Toko Plastik A">
+                        <label class="form-label">KETERANGAN / SUPLIER</label>
+                        <input type="text" class="form-control" id="modalKet" placeholder="Beli dari Toko Plastik A">
                     </div>
                 </div>
             </div>
@@ -396,12 +457,12 @@
     <div class="modal fade" id="modalPrintSlip" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
-          <div class="modal-header border-bottom no-print">
-            <h6 class="modal-title fw-bold"><i class="bi bi-printer me-2"></i>Slip Gaji Operator</h6>
+          <div class="modal-header border-bottom no-print py-2.5">
+            <h6 class="modal-title fw-bold"><i class="bi bi-printer me-1.5"></i>Slip Gaji Operator</h6>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body p-3" id="slipContent"></div>
-          <div class="modal-footer border-top no-print">
+          <div class="modal-footer border-top no-print py-2">
             <button type="button" class="btn btn-light btn-sm fw-semibold" data-bs-dismiss="modal">Tutup</button>
             <button type="button" class="btn btn-primary btn-sm fw-bold" onclick="window.print()">
                 <i class="bi bi-printer-fill me-1"></i> Cetak / Save PDF
@@ -418,21 +479,18 @@
       let globalGajiData = [];
       let globalOrdersData = [];
 
-      // Logic Pindah Halaman / Tab Mobile
+      // Switch Page / Tab Logic
       function switchTab(pageId, pageTitle, element) {
-        // Sembunyikan semua halaman
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
-        // Hilangkan style aktif tombol bawah
         document.querySelectorAll('.mobile-nav-item').forEach(btn => btn.classList.remove('active'));
 
-        // Tampilkan halaman yang dipilih
         document.getElementById(`page-${pageId}`).classList.add('active-page');
         element.classList.add('active');
         document.getElementById('pageTitleHeader').innerText = pageTitle;
         window.scrollTo(0,0);
       }
 
-      // Helper Format Tanggal Indonesia
+      // Helper Format Tanggal Indonesia (DD-MM-YYYY)
       function formatTanggalIndo(rawDate) {
         if (!rawDate) return "-";
         let d;
@@ -471,7 +529,7 @@
         }
       }
 
-      // Submit Form Order PO
+      // Submit Order PO
       document.getElementById('formPO').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('btnSimpan');
@@ -566,6 +624,7 @@
         const tbodyStok = document.getElementById("stok-body");
         const tbodyStokIn = document.getElementById("stokIn-body");
         const tbodyGaji = document.getElementById("gaji-body");
+        const tbodyOwner = document.getElementById("owner-body");
         const bahanSelect = document.getElementById("bahanSelect");
 
         fetch(API_URL)
@@ -576,7 +635,7 @@
               globalGajiData = res.gaji || [];
               globalOrdersData = res.orders || [];
 
-              document.getElementById("poCountBadge").innerText = globalOrdersData.length;
+              document.getElementById("poCountBadge").innerText = `${globalOrdersData.length} PO`;
 
               // 1. Dropdown Bahan
               globalTarifMap = {};
@@ -677,7 +736,7 @@
                 tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada riwayat.</td></tr>';
               }
 
-              // 5. Rekap Gaji & Cetak Slip
+              // 5. Rekap Gaji & Slip Gaji
               tbodyGaji.innerHTML = "";
               res.gaji.forEach(item => {
                 const row = document.createElement("tr");
@@ -693,6 +752,28 @@
                 `;
                 tbodyGaji.appendChild(row);
               });
+
+              // 6. LAPORAN OWNER
+              tbodyOwner.innerHTML = "";
+              let grandTotalQty = 0;
+              let grandTotalUpah = 0;
+
+              res.gaji.forEach(item => {
+                grandTotalQty += Number(item.totalQty);
+                grandTotalUpah += Number(item.totalGaji);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                  <td class="ps-3 fw-semibold text-dark">${item.namaPekerja}</td>
+                  <td class="text-end fw-bold">${Number(item.totalQty).toLocaleString('id-ID')} <small class="fw-normal text-muted">pcs</small></td>
+                  <td class="text-end pe-3 fw-bold text-success">Rp ${Number(item.totalGaji).toLocaleString('id-ID')}</td>
+                `;
+                tbodyOwner.appendChild(row);
+              });
+
+              document.getElementById("ownerTotalQty").innerText = `${grandTotalQty.toLocaleString('id-ID')} pcs`;
+              document.getElementById("ownerTotalUpah").innerText = `Rp ${grandTotalUpah.toLocaleString('id-ID')}`;
+              document.getElementById("ownerTotalOperator").innerText = `${res.gaji.length} Operator`;
 
             }
           })
@@ -712,7 +793,7 @@
         });
       }
 
-      // Tampilkan Slip Gaji Modern
+      // Tampilkan Slip Gaji
       function printSlipGaji(namaPekerja) {
         const filterOrders = globalOrdersData.filter(o => o.pekerja.toLowerCase() === namaPekerja.toLowerCase());
         const totalPcs = filterOrders.reduce((sum, o) => sum + Number(o.qty), 0);
