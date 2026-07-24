@@ -262,7 +262,7 @@
                 </button>
             </div>
 
-            <!-- Tabel Sisa Stok -->
+            <!-- TABEL 1: Sisa Stok Gudang -->
             <div class="card-app mb-3">
                 <div class="card-app-header">
                     <h6 class="fw-bold mb-0"><i class="bi bi-box-seam me-1 text-success"></i> Sisa Stok Gudang</h6>
@@ -286,13 +286,37 @@
                 </div>
             </div>
 
-            <!-- Tabel Riwayat Stok In -->
+            <!-- TABEL 2: Tracking Operator Pemakai Stok -->
+            <div class="card-app mb-3">
+                <div class="card-app-header">
+                    <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-person-badge me-1"></i> Tracking Operator Pemakai Stok</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                        <table class="table table-app align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="ps-3">Operator</th>
+                                    <th>Bahan / Cup</th>
+                                    <th>Tgl & PO</th>
+                                    <th class="pe-3 text-end">Jumlah Pakai</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stokOut-body">
+                                <tr><td colspan="4" class="text-center py-3 text-muted">Belum ada pemakaian stok.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABEL 3: Riwayat Stok Masuk -->
             <div class="card-app">
                 <div class="card-app-header">
                     <h6 class="fw-bold mb-0"><i class="bi bi-arrow-down-left-square me-1 text-info"></i> Riwayat Stok Masuk</h6>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                    <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
                         <table class="table table-app align-middle mb-0">
                             <thead>
                                 <tr>
@@ -610,6 +634,7 @@
       function loadDashboardData() {
         const tbodyOrders = document.getElementById("orders-body");
         const tbodyStok = document.getElementById("stok-body");
+        const tbodyStokOut = document.getElementById("stokOut-body");
         const tbodyStokIn = document.getElementById("stokIn-body");
         const tbodyGaji = document.getElementById("gaji-body");
         const tbodyOwner = document.getElementById("owner-body");
@@ -637,6 +662,7 @@
                 });
               }
 
+              // 1. Render Order PO
               tbodyOrders.innerHTML = "";
               if (res.orders.length === 0) {
                 tbodyOrders.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Belum ada order.</td></tr>';
@@ -673,6 +699,7 @@
                 });
               }
 
+              // 2. Render Sisa Stok Gudang
               tbodyStok.innerHTML = "";
               const warningBox = document.getElementById("stokWarningBox");
               const warningList = document.getElementById("stokWarningList");
@@ -704,6 +731,27 @@
               if (hasWarning) warningBox.classList.remove("d-none");
               else warningBox.classList.add("d-none");
 
+              // 3. Render TRACKING OPERATOR PEMAKAI STOK
+              tbodyStokOut.innerHTML = "";
+              if (res.orders && res.orders.length > 0) {
+                [...res.orders].reverse().forEach(ord => {
+                  const row = document.createElement("tr");
+                  row.innerHTML = `
+                    <td class="ps-3 fw-bold text-dark">${ord.pekerja}</td>
+                    <td><span class="badge bg-light text-dark border">${ord.bahan}</span></td>
+                    <td>
+                      <div class="fw-semibold">${ord.pelanggan}</div>
+                      <small class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(ord.tanggal)} (${ord.noPO})</small>
+                    </td>
+                    <td class="pe-3 text-end fw-bold text-danger">-${Number(ord.qty).toLocaleString('id-ID')} pcs</td>
+                  `;
+                  tbodyStokOut.appendChild(row);
+                });
+              } else {
+                tbodyStokOut.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada pemakaian stok.</td></tr>';
+              }
+
+              // 4. Render Riwayat Stok Masuk
               tbodyStokIn.innerHTML = "";
               if (res.stokIn && res.stokIn.length > 0) {
                 [...res.stokIn].reverse().forEach(stk => {
@@ -720,6 +768,7 @@
                 tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada riwayat.</td></tr>';
               }
 
+              // 5. Render Rekap Gaji & Slip Gaji
               tbodyGaji.innerHTML = "";
               res.gaji.forEach(item => {
                 const row = document.createElement("tr");
@@ -736,6 +785,7 @@
                 tbodyGaji.appendChild(row);
               });
 
+              // 6. Render Owner Report
               tbodyOwner.innerHTML = "";
               let grandTotalQty = 0;
               let grandTotalUpah = 0;
