@@ -103,17 +103,17 @@
       }
 
       .table-app th {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         text-transform: uppercase;
         letter-spacing: 0.03em;
         color: #64748b;
         background: #f8fafc;
-        padding: 0.75rem 0.8rem;
+        padding: 0.65rem 0.75rem;
         border-bottom: 1px solid var(--card-border);
       }
       .table-app td {
-        padding: 0.8rem;
-        font-size: 0.85rem;
+        padding: 0.7rem 0.75rem;
+        font-size: 0.82rem;
         vertical-align: middle;
         border-bottom: 1px solid #f1f5f9;
         color: #334155;
@@ -124,6 +124,15 @@
         border-radius: 10px;
         background: #ffffff;
         border: 1px solid var(--card-border);
+      }
+
+      .operator-section-header {
+        background-color: #f1f5f9;
+        font-weight: 700;
+        color: #0f172a;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        border-top: 2px solid var(--card-border);
       }
 
       @media print {
@@ -335,25 +344,27 @@
             </div>
         </div>
 
-        <!-- ================= HALAMAN 4: GAJI PEKERJA ================= -->
+        <!-- ================= HALAMAN 4: GAJI PEKERJA (RINCIAN MODEL EXCEL) ================= -->
         <div id="page-gaji" class="page-section">
             <div class="card-app">
-                <div class="card-app-header">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-wallet2 me-1 text-primary"></i> Rekap Upah Operator</h6>
+                <div class="card-app-header d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0"><i class="bi bi-wallet2 me-1 text-primary"></i> Rincian Upah Operator</h6>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-app align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th class="ps-3">Nama Operator</th>
-                                    <th class="text-end">Total Pcs</th>
-                                    <th class="text-end">Total Upah</th>
-                                    <th class="text-center pe-3">Action</th>
+                                    <th class="ps-3">Tgl</th>
+                                    <th>Café</th>
+                                    <th>Cup / Bahan</th>
+                                    <th class="text-center">Jasa</th>
+                                    <th class="text-end">Qty</th>
+                                    <th class="text-end pe-3">Total</th>
                                 </tr>
                             </thead>
                             <tbody id="gaji-body">
-                                <tr><td colspan="4" class="text-center py-4 text-muted">Memuat rekap gaji...</td></tr>
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Memuat rekap gaji...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -361,7 +372,7 @@
             </div>
         </div>
 
-        <!-- ================= HALAMAN 5: LAPORAN OWNER ================= -->
+        <!-- ================= HALAMAN 5: LAPORAN OWNER (MODEL EXCEL RINCI) ================= -->
         <div id="page-owner" class="page-section">
             <div class="row g-2 mb-3">
                 <div class="col-6">
@@ -380,7 +391,7 @@
 
             <div class="card-app mb-3">
                 <div class="card-app-header d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-fill text-primary me-1.5"></i> Performa Hasil Operator</h6>
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-table text-primary me-1.5"></i> Laporan Rinci Hasil Operator</h6>
                     <span class="badge bg-light text-dark border fw-normal" id="ownerTotalOperator">0 Operator</span>
                 </div>
                 <div class="card-body p-0">
@@ -388,13 +399,16 @@
                         <table class="table table-app align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th class="ps-3">Operator</th>
-                                    <th class="text-end">Hasil (Pcs)</th>
-                                    <th class="text-end pe-3">Total Upah</th>
+                                    <th class="ps-3">Tgl</th>
+                                    <th>Café</th>
+                                    <th>Cup / Bahan</th>
+                                    <th class="text-center">Jasa</th>
+                                    <th class="text-end">Qty</th>
+                                    <th class="text-end pe-3">Total</th>
                                 </tr>
                             </thead>
                             <tbody id="owner-body">
-                                <tr><td colspan="3" class="text-center py-4 text-muted">Memuat rekap...</td></tr>
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Memuat rekap...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -631,6 +645,68 @@
         });
       });
 
+      function renderExcelStyleTable(containerElement, ordersData) {
+        containerElement.innerHTML = "";
+        if (!ordersData || ordersData.length === 0) {
+          containerElement.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">Belum ada data pengerjaan.</td></tr>';
+          return;
+        }
+
+        // Grouping berdasarkan Operator
+        let grouped = {};
+        ordersData.forEach(ord => {
+          const op = ord.pekerja ? ord.pekerja.toUpperCase().trim() : "LAINNYA";
+          if (!grouped[op]) grouped[op] = [];
+          grouped[op].push(ord);
+        });
+
+        // Render tabel per Operator
+        Object.keys(grouped).forEach(opName => {
+          // Sub-header Operator
+          const headerRow = document.createElement("tr");
+          headerRow.innerHTML = `
+            <td colspan="6" class="operator-section-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-person-fill me-1 text-primary"></i> OPERATOR: ${opName}</span>
+                <button class="btn btn-xs btn-outline-primary py-0 px-2 fw-bold" style="font-size:0.7rem;" onclick="printSlipGaji('${opName}')">
+                  <i class="bi bi-printer"></i> Slip Gaji
+                </button>
+              </div>
+            </td>
+          `;
+          containerElement.appendChild(headerRow);
+
+          let totalOpQty = 0;
+          let totalOpUpah = 0;
+
+          grouped[opName].forEach(ord => {
+            totalOpQty += Number(ord.qty || 0);
+            totalOpUpah += Number(ord.totalUpah || 0);
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="ps-3 text-muted" style="font-size:0.75rem;">${formatTanggalIndo(ord.tanggal)}</td>
+              <td class="fw-semibold text-dark">${ord.pelanggan}</td>
+              <td>${ord.bahan}</td>
+              <td class="text-center text-muted">${ord.tarif}</td>
+              <td class="text-end fw-bold">${Number(ord.qty).toLocaleString('id-ID')}</td>
+              <td class="text-end pe-3 fw-bold text-primary">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</td>
+            `;
+            containerElement.appendChild(row);
+          });
+
+          // Summary Baris Total per Operator
+          const footerRow = document.createElement("tr");
+          footerRow.className = "table-light fw-bold";
+          footerRow.innerHTML = `
+            <td colspan="4" class="ps-3 text-dark" style="font-size:0.75rem;">TOTAL (${opName})</td>
+            <td class="text-end text-dark">${totalOpQty.toLocaleString('id-ID')}</td>
+            <td class="text-end pe-3 text-success">Rp ${totalOpUpah.toLocaleString('id-ID')}</td>
+          `;
+          containerElement.appendChild(footerRow);
+        });
+      }
+
       function loadDashboardData() {
         const tbodyOrders = document.getElementById("orders-body");
         const tbodyStok = document.getElementById("stok-body");
@@ -768,44 +844,17 @@
                 tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada riwayat.</td></tr>';
               }
 
-              // 5. Render Rekap Gaji & Slip Gaji
-              tbodyGaji.innerHTML = "";
-              res.gaji.forEach(item => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                  <td class="ps-3 fw-semibold">${item.namaPekerja}</td>
-                  <td class="text-end fw-bold">${Number(item.totalQty).toLocaleString('id-ID')} <small class="fw-normal">pcs</small></td>
-                  <td class="text-end fw-bold text-primary">Rp ${Number(item.totalGaji).toLocaleString('id-ID')}</td>
-                  <td class="text-center pe-3">
-                    <button class="btn btn-sm btn-outline-primary fw-semibold px-2 py-1" style="font-size:0.75rem;" onclick="printSlipGaji('${item.namaPekerja}')">
-                      <i class="bi bi-printer"></i> Slip
-                    </button>
-                  </td>
-                `;
-                tbodyGaji.appendChild(row);
-              });
+              // 5 & 6. Render Gaji & Laporan Owner MODEL EXCEL RINCI
+              renderExcelStyleTable(tbodyGaji, res.orders);
+              renderExcelStyleTable(tbodyOwner, res.orders);
 
-              // 6. Render Owner Report
-              tbodyOwner.innerHTML = "";
-              let grandTotalQty = 0;
-              let grandTotalUpah = 0;
-
-              res.gaji.forEach(item => {
-                grandTotalQty += Number(item.totalQty);
-                grandTotalUpah += Number(item.totalGaji);
-
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                  <td class="ps-3 fw-semibold text-dark">${item.namaPekerja}</td>
-                  <td class="text-end fw-bold">${Number(item.totalQty).toLocaleString('id-ID')} <small class="fw-normal text-muted">pcs</small></td>
-                  <td class="text-end pe-3 fw-bold text-success">Rp ${Number(item.totalGaji).toLocaleString('id-ID')}</td>
-                `;
-                tbodyOwner.appendChild(row);
-              });
+              let grandTotalQty = res.orders.reduce((sum, o) => sum + Number(o.qty || 0), 0);
+              let grandTotalUpah = res.orders.reduce((sum, o) => sum + Number(o.totalUpah || 0), 0);
+              let totalOpCount = [...new Set(res.orders.map(o => o.pekerja ? o.pekerja.toUpperCase().trim() : "LAINNYA"))].length;
 
               document.getElementById("ownerTotalQty").innerText = `${grandTotalQty.toLocaleString('id-ID')} pcs`;
               document.getElementById("ownerTotalUpah").innerText = `Rp ${grandTotalUpah.toLocaleString('id-ID')}`;
-              document.getElementById("ownerTotalOperator").innerText = `${res.gaji.length} Operator`;
+              document.getElementById("ownerTotalOperator").innerText = `${totalOpCount} Operator`;
 
             }
           })
