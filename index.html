@@ -797,84 +797,92 @@
         });
       }
 
-      function printSlipGaji(namaPekerja) {
-        const filterOrders = globalOrdersData.filter(o => o.pekerja.toLowerCase() === namaPekerja.toLowerCase());
-        const totalPcs = filterOrders.reduce((sum, o) => sum + Number(o.qty), 0);
-        const totalUpah = filterOrders.reduce((sum, o) => sum + Number(o.totalUpah), 0);
+     function printSlipGaji(namaPekerja) {
+  const filterOrders = globalOrdersData.filter(o => o.pekerja.toLowerCase() === namaPekerja.toLowerCase());
+  const totalPcs = filterOrders.reduce((sum, o) => sum + Number(o.qty || 0), 0);
+  const totalUpah = filterOrders.reduce((sum, o) => sum + Number(o.totalUpah || 0), 0);
 
-        let itemRows = "";
-        filterOrders.forEach(o => {
-          itemRows += `
+  let itemRows = "";
+  filterOrders.forEach(o => {
+    itemRows += `
+      <tr>
+        <td class="text-center" style="font-size:0.7rem;">${formatTanggalIndo(o.tanggal)}</td>
+        <td class="fw-semibold">${o.pelanggan}</td>
+        <td>${o.bahan}</td>
+        <td class="text-center">${o.oz || '-'}</td>
+        <td class="text-center">${o.jenis || '-'}</td>
+        <td class="text-end">Rp ${Number(o.tarif).toLocaleString('id-ID')}</td>
+        <td class="text-end fw-bold">${Number(o.qty).toLocaleString('id-ID')}</td>
+        <td class="text-end fw-bold text-primary">Rp ${Number(o.totalUpah).toLocaleString('id-ID')}</td>
+      </tr>
+    `;
+  });
+
+  const slipHtml = `
+    <div class="p-1">
+      <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+        <div>
+          <h6 class="fw-bold mb-0 text-dark">PRINTFLOW</h6>
+          <small class="text-muted" style="font-size:0.7rem;">Slip Gaji Pekerja / Operator</small>
+        </div>
+        <span class="badge bg-primary px-2 py-1">CONFIRMED</span>
+      </div>
+      
+      <div class="row mb-2 small" style="font-size:0.75rem;">
+        <div class="col-6">
+          <span class="text-muted">Nama Operator:</span>
+          <div class="fw-bold text-dark fs-6">${namaPekerja}</div>
+        </div>
+        <div class="col-6 text-end">
+          <span class="text-muted">Tanggal Cetak:</span>
+          <div class="fw-semibold">${formatTanggalIndo(new Date())}</div>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="table table-sm table-bordered align-middle mb-2 small" style="font-size:0.72rem; white-space:nowrap;">
+          <thead class="table-dark">
             <tr>
-              <td class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(o.tanggal)}</td>
-              <td class="fw-semibold">${o.noPO}</td>
-              <td>${o.bahan}</td>
-              <td class="text-end">${Number(o.qty).toLocaleString('id-ID')}</td>
-              <td class="text-end fw-semibold">Rp ${Number(o.totalUpah).toLocaleString('id-ID')}</td>
+              <th class="text-center">Tanggal</th>
+              <th>Café / Pelanggan</th>
+              <th>Cup / Datar</th>
+              <th class="text-center">OZ</th>
+              <th class="text-center">Jenis</th>
+              <th class="text-end">Jasa</th>
+              <th class="text-end">Quantity</th>
+              <th class="text-end">Total</th>
             </tr>
-          `;
-        });
+          </thead>
+          <tbody>
+            ${itemRows.length > 0 ? itemRows : '<tr><td colspan="8" class="text-center py-2 text-muted">Tidak ada rincian.</td></tr>'}
+          </tbody>
+          <tfoot>
+            <tr class="fw-bold table-secondary">
+              <td colspan="6" class="ps-2">TOTAL DITERIMA</td>
+              <td class="text-end">${totalPcs.toLocaleString('id-ID')}</td>
+              <td class="text-end text-success">Rp ${totalUpah.toLocaleString('id-ID')}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-        const slipHtml = `
-          <div class="p-1">
-            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
-              <div>
-                <h6 class="fw-bold mb-0 text-dark">PRINTFLOW</h6>
-                <small class="text-muted" style="font-size:0.7rem;">Slip Gaji Pekerja / Operator</small>
-              </div>
-              <span class="badge bg-primary px-2 py-1">CONFIRMED</span>
-            </div>
-            
-            <div class="row mb-2 small" style="font-size:0.75rem;">
-              <div class="col-6">
-                <span class="text-muted">Operator:</span>
-                <div class="fw-bold text-dark">${namaPekerja}</div>
-              </div>
-              <div class="col-6 text-end">
-                <span class="text-muted">Tgl Cetak:</span>
-                <div class="fw-semibold">${formatTanggalIndo(new Date())}</div>
-              </div>
-            </div>
+      <div class="d-flex justify-content-between mt-4 pt-2 text-center" style="font-size:0.75rem;">
+        <div>
+          <span class="text-muted">Penerima,</span><br><br><br>
+          <strong>(${namaPekerja})</strong>
+        </div>
+        <div>
+          <span class="text-muted">Admin / Bendahara,</span><br><br><br>
+          <strong>( ........................ )</strong>
+        </div>
+      </div>
+    </div>
+  `;
 
-            <table class="table table-sm table-bordered align-middle mb-2 small" style="font-size:0.75rem;">
-              <thead class="table-light">
-                <tr>
-                  <th>Tgl</th>
-                  <th>PO</th>
-                  <th>Cup/Bahan</th>
-                  <th class="text-end">Qty</th>
-                  <th class="text-end">Upah</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${itemRows.length > 0 ? itemRows : '<tr><td colspan="5" class="text-center py-2 text-muted">Tidak ada rincian.</td></tr>'}
-              </tbody>
-              <tfoot>
-                <tr class="fw-bold table-light">
-                  <td colspan="3" class="ps-1">TOTAL DITERIMA</td>
-                  <td class="text-end">${totalPcs.toLocaleString('id-ID')}</td>
-                  <td class="text-end text-primary">Rp ${totalUpah.toLocaleString('id-ID')}</td>
-                </tr>
-              </tfoot>
-            </table>
-
-            <div class="d-flex justify-content-between mt-3 pt-2 text-center" style="font-size:0.7rem;">
-              <div>
-                <span class="text-muted">Penerima,</span><br><br><br>
-                <strong>(${namaPekerja})</strong>
-              </div>
-              <div>
-                <span class="text-muted">Admin,</span><br><br><br>
-                <strong>( ........................ )</strong>
-              </div>
-            </div>
-          </div>
-        `;
-
-        document.getElementById('slipContent').innerHTML = slipHtml;
-        const printModal = new bootstrap.Modal(document.getElementById('modalPrintSlip'));
-        printModal.show();
-      }
+  document.getElementById('slipContent').innerHTML = slipHtml;
+  const printModal = new bootstrap.Modal(document.getElementById('modalPrintSlip'));
+  printModal.show();
+}
 
       function eksekusiCetak() {
         window.print();
