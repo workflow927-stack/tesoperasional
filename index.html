@@ -31,8 +31,7 @@
 
       /* Navbar Top Sleek */
       .navbar-mobile {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
+        background: #ffffff;
         border-bottom: 1px solid #e2e8f0;
       }
 
@@ -48,7 +47,7 @@
         justify-content: space-around;
         padding: 8px 6px;
         z-index: 1030;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
         border: 1px solid #f1f5f9;
       }
 
@@ -81,7 +80,7 @@
         background: var(--card-bg);
         border-radius: 16px;
         border: 1px solid #f1f5f9;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
         margin-bottom: 14px;
         padding: 16px;
       }
@@ -109,39 +108,32 @@
         box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
       }
 
-      /* Stat Widget Modern */
-      .stat-box {
-        background: #ffffff;
-        padding: 14px;
-        border-radius: 16px;
-        border: 1px solid #f1f5f9;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-      }
-
-      /* Operator Item Cards */
-      .op-card-header {
-        background: #f8fafc;
+      /* Tabel Excel Responsive untuk HP */
+      .table-excel-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         border-radius: 12px;
-        padding: 10px 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
+        border: 1px solid #e2e8f0;
       }
 
-      .op-item-box {
-        background: #ffffff;
-        border: 1px solid #f1f5f9;
-        border-radius: 12px;
-        padding: 12px;
-        margin-bottom: 8px;
+      .table-excel {
+        width: 100%;
+        margin-bottom: 0;
+        white-space: nowrap;
+        font-size: 0.75rem;
       }
 
-      .badge-pill-custom {
-        font-size: 0.65rem;
+      .table-excel th {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
         font-weight: 700;
-        padding: 3px 8px;
-        border-radius: 20px;
+        text-align: center;
+        padding: 8px 10px;
+      }
+
+      .table-excel td {
+        padding: 8px 10px;
+        vertical-align: middle;
       }
 
       .page-section {
@@ -165,19 +157,20 @@
       const API_URL = "https://script.google.com/macros/s/AKfycbw1u9cDQdcmd7xmbfxa_D9y28YVFPy6G0hWNJTZvzcR1GTgtSWvCrgUAut9f51WlowP/exec";
     </script>
 
-    <!-- Header Navbar Mobile -->
-    <nav class="navbar navbar-mobile sticky-top px-3 py-2.5 no-print">
+    <!-- Header Navbar Mobile (LOGO DIPERBAIKI) -->
+    <nav class="navbar navbar-mobile sticky-top px-3 py-2 no-print">
         <div class="container-fluid d-flex justify-content-between align-items-center p-0">
-            <div class="d-flex align-items-center gap-2.5">
-                <div class="bg-primary bg-gradient text-white rounded-4 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width:40px; height:40px;">
-                    <i class="bi bi-printer-fill fs-5"></i>
+            <div class="d-flex align-items-center gap-2">
+                <!-- Ikon Kecil Rapi -->
+                <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; flex-shrink:0;">
+                    <i class="bi bi-printer-fill fs-6"></i>
                 </div>
                 <div>
-                    <h6 class="fw-extrabold mb-0 text-dark" id="pageTitleHeader" style="font-weight:800;">Input Order PO</h6>
-                    <small class="text-muted fw-semibold" style="font-size: 0.68rem;">Sistem Percetakan Modern</small>
+                    <h6 class="fw-bold mb-0 text-dark" id="pageTitleHeader" style="font-size:0.95rem;">Input Order PO</h6>
+                    <small class="text-muted fw-semibold" style="font-size: 0.65rem;">Sistem Percetakan Modern</small>
                 </div>
             </div>
-            <button onclick="loadDashboardData()" class="btn btn-sm btn-light border-0 fw-bold px-3 py-1.5 rounded-3 shadow-sm bg-white">
+            <button onclick="loadDashboardData()" class="btn btn-sm btn-light border fw-bold px-2.5 py-1 rounded-3 bg-white" style="font-size:0.75rem;">
                 <i class="bi bi-arrow-clockwise text-primary me-1"></i> Refresh
             </button>
         </div>
@@ -294,46 +287,46 @@
             </div>
         </div>
 
-        <!-- ================= HALAMAN 4: GAJI PEKERJA ================= -->
+        <!-- ================= HALAMAN 4: GAJI PEKERJA (TABEL EXCEL) ================= -->
         <div id="page-gaji" class="page-section">
             <div class="mb-3 px-1">
-                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-wallet2 text-primary me-2"></i> Rekap Hasil & Gaji Operator</h6>
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-wallet2 text-primary me-2"></i> Rekap Gaji Operator (Laporan Excel)</h6>
             </div>
-            <div id="gaji-cards-container">
+            <div id="gaji-tables-container">
                 <div class="text-center py-5 text-muted">Memuat rekap gaji...</div>
             </div>
         </div>
 
-        <!-- ================= HALAMAN 5: LAPORAN OWNER ================= -->
+        <!-- ================= HALAMAN 5: LAPORAN OWNER (TABEL EXCEL) ================= -->
         <div id="page-owner" class="page-section">
             <div class="row g-2 mb-3">
                 <div class="col-6">
-                    <div class="stat-box">
+                    <div class="card-custom p-3 mb-0">
                         <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.65rem;">TOTAL PRODUKSI</small>
-                        <h5 class="fw-extrabold mb-0 text-primary" style="font-weight:800;" id="ownerTotalQty">0 pcs</h5>
+                        <h5 class="fw-bold mb-0 text-primary" id="ownerTotalQty">0 pcs</h5>
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="stat-box">
+                    <div class="card-custom p-3 mb-0">
                         <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.65rem;">TOTAL UPAH OUT</small>
-                        <h5 class="fw-extrabold mb-0 text-success" style="font-weight:800;" id="ownerTotalUpah">Rp 0</h5>
+                        <h5 class="fw-bold mb-0 text-success" id="ownerTotalUpah">Rp 0</h5>
                     </div>
                 </div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3 px-1">
-                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i> Laporan Rinci Ringkasan</h6>
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i> Laporan Detail Owner</h6>
                 <span class="badge bg-light text-dark border fw-semibold" id="ownerTotalOperator">0 Operator</span>
             </div>
 
-            <div id="owner-cards-container">
-                <div class="text-center py-5 text-muted">Memuat ringkasan...</div>
+            <div id="owner-tables-container">
+                <div class="text-center py-5 text-muted">Memuat rincian owner...</div>
             </div>
         </div>
 
     </div>
 
-    <!-- Floating Bottom Navigation Modern -->
+    <!-- Floating Bottom Navigation -->
     <div class="mobile-bottom-nav no-print">
         <button class="mobile-nav-item active" onclick="switchTab('input-po', 'Input Order PO', this)">
             <i class="bi bi-plus-circle"></i>
@@ -351,7 +344,7 @@
             <i class="bi bi-wallet2"></i>
             <span>Gaji</span>
         </button>
-        <button class="mobile-nav-item" onclick="switchTab('owner', 'Laporan Ringkasan Owner', this)">
+        <button class="mobile-nav-item" onclick="switchTab('owner', 'Laporan Owner', this)">
             <i class="bi bi-bar-chart-line-fill"></i>
             <span>Owner</span>
         </button>
@@ -400,24 +393,23 @@
     </div>
 
     <!-- MODAL CETAK SLIP GAJI -->
-<div class="modal fade" id="modalPrintSlip" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered px-3">
-    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
-      <div class="modal-header border-bottom no-print py-2.5">
-        <h6 class="modal-title fw-bold"><i class="bi bi-printer me-1.5"></i> Slip Gaji Operator</h6>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-3" id="slipContent"></div>
-      <div class="modal-footer border-top no-print py-2">
-        <button type="button" class="btn btn-light btn-sm fw-semibold rounded-3" data-bs-dismiss="modal">Tutup</button>
-        <!-- TOMBOL DIPERBAIKI -->
-        <button type="button" class="btn btn-primary btn-sm fw-bold rounded-3" onclick="eksekusiCetak()">
-            <i class="bi bi-printer-fill me-1"></i> Cetak / Save PDF
-        </button>
+    <div class="modal fade" id="modalPrintSlip" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered px-3">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+          <div class="modal-header border-bottom no-print py-2.5">
+            <h6 class="modal-title fw-bold"><i class="bi bi-printer me-1.5"></i> Slip Gaji Operator</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-3" id="slipContent"></div>
+          <div class="modal-footer border-top no-print py-2">
+            <button type="button" class="btn btn-light btn-sm fw-semibold rounded-3" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary btn-sm fw-bold rounded-3" onclick="eksekusiCetak()">
+                <i class="bi bi-printer-fill me-1"></i> Cetak / Save PDF
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -562,8 +554,8 @@
         });
       });
 
-      // RENDER OPERATOR CARD CLEAN & ELEGANT
-      function renderOperatorCards(containerElement, ordersData) {
+      // RENDER TABEL LENGKAP PERSIS FORMAT EXCEL
+      function renderOperatorExcelTables(containerElement, ordersData) {
         containerElement.innerHTML = "";
         if (!ordersData || ordersData.length === 0) {
           containerElement.innerHTML = '<div class="text-center py-5 text-muted">Belum ada data pengerjaan.</div>';
@@ -581,60 +573,67 @@
           let totalOpQty = 0;
           let totalOpUpah = 0;
 
-          let itemHtml = "";
+          let rowsHtml = "";
           grouped[opName].forEach(ord => {
             totalOpQty += Number(ord.qty || 0);
             totalOpUpah += Number(ord.totalUpah || 0);
 
-            itemHtml += `
-              <div class="op-item-box">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                  <div>
-                    <strong class="text-dark d-block" style="font-size:0.88rem;">${ord.pelanggan}</strong>
-                    <div class="text-muted" style="font-size:0.75rem;">
-                      <span class="badge bg-light text-dark border me-1">${ord.bahan}</span>
-                      ${ord.oz ? '<span class="badge bg-light text-muted border me-1">' + ord.oz + '</span>' : ''}
-                      ${ord.jenis ? '<span class="badge bg-light text-muted border">' + ord.jenis + '</span>' : ''}
-                    </div>
-                  </div>
-                  <div class="text-end">
-                    <strong class="text-primary d-block" style="font-size:0.88rem;">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</strong>
-                    <small class="text-muted" style="font-size:0.7rem;">${Number(ord.qty).toLocaleString('id-ID')} pcs @Rp${ord.tarif}</small>
-                  </div>
-                </div>
-                <div class="text-muted pt-1 border-top" style="font-size:0.68rem;">
-                  <i class="bi bi-calendar3 me-1"></i> ${formatTanggalIndo(ord.tanggal)}
-                </div>
-              </div>
+            rowsHtml += `
+              <tr>
+                <td class="text-center">${formatTanggalIndo(ord.tanggal)}</td>
+                <td class="fw-semibold">${ord.pelanggan}</td>
+                <td>${ord.bahan}</td>
+                <td class="text-center">${ord.oz || '-'}</td>
+                <td class="text-center">${ord.jenis || '-'}</td>
+                <td class="text-end">Rp ${Number(ord.tarif).toLocaleString('id-ID')}</td>
+                <td class="text-end fw-bold">${Number(ord.qty).toLocaleString('id-ID')}</td>
+                <td class="text-end fw-bold text-primary">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</td>
+              </tr>
             `;
           });
 
-          const opCard = document.createElement("div");
-          opCard.className = "card-custom";
-          opCard.innerHTML = `
-            <div class="op-card-header">
+          const tableWrapper = document.createElement("div");
+          tableWrapper.className = "card-custom p-3 mb-3";
+          tableWrapper.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
               <div>
                 <small class="text-muted fw-bold d-block" style="font-size:0.65rem;">OPERATOR</small>
-                <strong class="text-dark fs-6">${opName}</strong>
+                <h6 class="fw-bold mb-0 text-dark">${opName}</h6>
               </div>
-              <button class="btn btn-sm btn-outline-primary fw-bold py-1 px-3 rounded-3" style="font-size:0.75rem;" onclick="printSlipGaji('${opName}')">
+              <button class="btn btn-sm btn-outline-primary fw-bold py-1 px-2.5 rounded-3" style="font-size:0.75rem;" onclick="printSlipGaji('${opName}')">
                 <i class="bi bi-printer me-1"></i> Slip Gaji
               </button>
             </div>
-            
-            <div class="mb-2">
-              ${itemHtml}
-            </div>
 
-            <div class="d-flex justify-content-between align-items-center pt-2 mt-2 border-top">
-              <span class="fw-bold text-muted" style="font-size:0.78rem;">TOTAL DITERIMA</span>
-              <div class="text-end">
-                <span class="fw-bold text-dark me-2" style="font-size:0.85rem;">${totalOpQty.toLocaleString('id-ID')} pcs</span>
-                <span class="fw-extrabold text-success" style="font-size:0.95rem; font-weight:800;">Rp ${totalOpUpah.toLocaleString('id-ID')}</span>
-              </div>
+            <div class="table-excel-container">
+              <table class="table table-bordered table-striped table-hover align-middle table-excel">
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Café / Pelanggan</th>
+                    <th>Cup / Datar</th>
+                    <th>OZ</th>
+                    <th>Jenis</th>
+                    <th>Jasa</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rowsHtml}
+                </tbody>
+                <tfoot>
+                  <tr class="fw-bold table-secondary">
+                    <td colspan="6" class="text-center">TOTAL OPERATOR (${opName})</td>
+                    <td class="text-end">${totalOpQty.toLocaleString('id-ID')}</td>
+                    <td class="text-end text-success">Rp ${totalOpUpah.toLocaleString('id-ID')}</td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
+            <small class="text-muted d-block mt-1" style="font-size:0.65rem;">* Geser tabel ke kanan/kiri untuk melihat seluruh kolom.</small>
           `;
-          containerElement.appendChild(opCard);
+          containerElement.appendChild(tableWrapper);
         });
       }
 
@@ -642,8 +641,8 @@
         const ordersCardsContainer = document.getElementById("orders-cards-container");
         const stokCardsContainer = document.getElementById("stok-cards-container");
         const stokOutCardsContainer = document.getElementById("stokOut-cards-container");
-        const gajiCardsContainer = document.getElementById("gaji-cards-container");
-        const ownerCardsContainer = document.getElementById("owner-cards-container");
+        const gajiTablesContainer = document.getElementById("gaji-tables-container");
+        const ownerTablesContainer = document.getElementById("owner-tables-container");
         const bahanSelect = document.getElementById("bahanSelect");
 
         fetch(API_URL)
@@ -667,7 +666,7 @@
                 });
               }
 
-              // 1. Render Order PO (Kartu Modern)
+              // 1. Render Order PO
               ordersCardsContainer.innerHTML = "";
               if (res.orders.length === 0) {
                 ordersCardsContainer.innerHTML = '<div class="text-center py-5 text-muted">Belum ada order.</div>';
@@ -768,9 +767,9 @@
                 stokOutCardsContainer.innerHTML = '<div class="text-center py-3 text-muted">Belum ada pemakaian.</div>';
               }
 
-              // 4 & 5. Render Gaji & Laporan Owner
-              renderOperatorCards(gajiCardsContainer, res.orders);
-              renderOperatorCards(ownerCardsContainer, res.orders);
+              // 4 & 5. Render Rekap Gaji & Owner (FORMAT TABEL EXCEL PRESISI)
+              renderOperatorExcelTables(gajiTablesContainer, res.orders);
+              renderOperatorExcelTables(ownerTablesContainer, res.orders);
 
               let grandTotalQty = res.orders.reduce((sum, o) => sum + Number(o.qty || 0), 0);
               let grandTotalUpah = res.orders.reduce((sum, o) => sum + Number(o.totalUpah || 0), 0);
@@ -799,88 +798,87 @@
       }
 
       function printSlipGaji(namaPekerja) {
-  const filterOrders = globalOrdersData.filter(o => o.pekerja.toLowerCase() === namaPekerja.toLowerCase());
-  const totalPcs = filterOrders.reduce((sum, o) => sum + Number(o.qty), 0);
-  const totalUpah = filterOrders.reduce((sum, o) => sum + Number(o.totalUpah), 0);
+        const filterOrders = globalOrdersData.filter(o => o.pekerja.toLowerCase() === namaPekerja.toLowerCase());
+        const totalPcs = filterOrders.reduce((sum, o) => sum + Number(o.qty), 0);
+        const totalUpah = filterOrders.reduce((sum, o) => sum + Number(o.totalUpah), 0);
 
-  let itemRows = "";
-  filterOrders.forEach(o => {
-    itemRows += `
-      <tr>
-        <td class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(o.tanggal)}</td>
-        <td class="fw-semibold">${o.noPO}</td>
-        <td>${o.bahan}</td>
-        <td class="text-end">${Number(o.qty).toLocaleString('id-ID')}</td>
-        <td class="text-end fw-semibold">Rp ${Number(o.totalUpah).toLocaleString('id-ID')}</td>
-      </tr>
-    `;
-  });
+        let itemRows = "";
+        filterOrders.forEach(o => {
+          itemRows += `
+            <tr>
+              <td class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(o.tanggal)}</td>
+              <td class="fw-semibold">${o.noPO}</td>
+              <td>${o.bahan}</td>
+              <td class="text-end">${Number(o.qty).toLocaleString('id-ID')}</td>
+              <td class="text-end fw-semibold">Rp ${Number(o.totalUpah).toLocaleString('id-ID')}</td>
+            </tr>
+          `;
+        });
 
-  const slipHtml = `
-    <div class="p-1">
-      <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
-        <div>
-          <h6 class="fw-bold mb-0 text-dark">PRINTFLOW</h6>
-          <small class="text-muted" style="font-size:0.7rem;">Slip Gaji Pekerja / Operator</small>
-        </div>
-        <span class="badge bg-primary px-2 py-1">CONFIRMED</span>
-      </div>
-      
-      <div class="row mb-2 small" style="font-size:0.75rem;">
-        <div class="col-6">
-          <span class="text-muted">Operator:</span>
-          <div class="fw-bold text-dark">${namaPekerja}</div>
-        </div>
-        <div class="col-6 text-end">
-          <span class="text-muted">Tgl Cetak:</span>
-          <div class="fw-semibold">${formatTanggalIndo(new Date())}</div>
-        </div>
-      </div>
+        const slipHtml = `
+          <div class="p-1">
+            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+              <div>
+                <h6 class="fw-bold mb-0 text-dark">PRINTFLOW</h6>
+                <small class="text-muted" style="font-size:0.7rem;">Slip Gaji Pekerja / Operator</small>
+              </div>
+              <span class="badge bg-primary px-2 py-1">CONFIRMED</span>
+            </div>
+            
+            <div class="row mb-2 small" style="font-size:0.75rem;">
+              <div class="col-6">
+                <span class="text-muted">Operator:</span>
+                <div class="fw-bold text-dark">${namaPekerja}</div>
+              </div>
+              <div class="col-6 text-end">
+                <span class="text-muted">Tgl Cetak:</span>
+                <div class="fw-semibold">${formatTanggalIndo(new Date())}</div>
+              </div>
+            </div>
 
-      <table class="table table-sm table-bordered align-middle mb-2 small" style="font-size:0.75rem;">
-        <thead class="table-light">
-          <tr>
-            <th>Tgl</th>
-            <th>PO</th>
-            <th>Cup/Bahan</th>
-            <th class="text-end">Qty</th>
-            <th class="text-end">Upah</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${itemRows.length > 0 ? itemRows : '<tr><td colspan="5" class="text-center py-2 text-muted">Tidak ada rincian.</td></tr>'}
-        </tbody>
-        <tfoot>
-          <tr class="fw-bold table-light">
-            <td colspan="3" class="ps-1">TOTAL DITERIMA</td>
-            <td class="text-end">${totalPcs.toLocaleString('id-ID')}</td>
-            <td class="text-end text-primary">Rp ${totalUpah.toLocaleString('id-ID')}</td>
-          </tr>
-        </tfoot>
-      </table>
+            <table class="table table-sm table-bordered align-middle mb-2 small" style="font-size:0.75rem;">
+              <thead class="table-light">
+                <tr>
+                  <th>Tgl</th>
+                  <th>PO</th>
+                  <th>Cup/Bahan</th>
+                  <th class="text-end">Qty</th>
+                  <th class="text-end">Upah</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemRows.length > 0 ? itemRows : '<tr><td colspan="5" class="text-center py-2 text-muted">Tidak ada rincian.</td></tr>'}
+              </tbody>
+              <tfoot>
+                <tr class="fw-bold table-light">
+                  <td colspan="3" class="ps-1">TOTAL DITERIMA</td>
+                  <td class="text-end">${totalPcs.toLocaleString('id-ID')}</td>
+                  <td class="text-end text-primary">Rp ${totalUpah.toLocaleString('id-ID')}</td>
+                </tr>
+              </tfoot>
+            </table>
 
-      <div class="d-flex justify-content-between mt-3 pt-2 text-center" style="font-size:0.7rem;">
-        <div>
-          <span class="text-muted">Penerima,</span><br><br><br>
-          <strong>(${namaPekerja})</strong>
-        </div>
-        <div>
-          <span class="text-muted">Admin,</span><br><br><br>
-          <strong>( ........................ )</strong>
-        </div>
-      </div>
-    </div>
-  `;
+            <div class="d-flex justify-content-between mt-3 pt-2 text-center" style="font-size:0.7rem;">
+              <div>
+                <span class="text-muted">Penerima,</span><br><br><br>
+                <strong>(${namaPekerja})</strong>
+              </div>
+              <div>
+                <span class="text-muted">Admin,</span><br><br><br>
+                <strong>( ........................ )</strong>
+              </div>
+            </div>
+          </div>
+        `;
 
-  document.getElementById('slipContent').innerHTML = slipHtml;
-  const printModal = new bootstrap.Modal(document.getElementById('modalPrintSlip'));
-  printModal.show();
-}
+        document.getElementById('slipContent').innerHTML = slipHtml;
+        const printModal = new bootstrap.Modal(document.getElementById('modalPrintSlip'));
+        printModal.show();
+      }
 
-// FUNGSI CETAK KHUSUS AGAR TIDAK TERBLOKIR MODAL
-function eksekusiCetak() {
-  window.print();
-}
+      function eksekusiCetak() {
+        window.print();
+      }
     </script>
 </body>
 </html>
