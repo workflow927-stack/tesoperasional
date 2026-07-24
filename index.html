@@ -7,28 +7,31 @@
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
     <style>
       :root {
         --bs-font-sans-serif: 'Plus Jakarta Sans', sans-serif;
-        --bg-main: #f8fafc;
+        --bg-main: #f1f5f9;
         --card-border: #e2e8f0;
-        --brand-primary: #2563eb;
+        --brand-primary: #1e293b;
+        --accent-blue: #2563eb;
       }
 
       body {
         font-family: var(--bs-font-sans-serif);
         background-color: var(--bg-main);
-        color: #1e293b;
-        padding-bottom: 80px;
+        color: #0f172a;
+        padding-bottom: 90px;
+        -webkit-font-smoothing: antialiased;
       }
 
       .navbar-mobile {
         background: #ffffff;
         border-bottom: 1px solid var(--card-border);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
       }
 
       .mobile-bottom-nav {
@@ -40,9 +43,9 @@
         border-top: 1px solid var(--card-border);
         display: flex;
         justify-content: space-around;
-        padding: 8px 0;
+        padding: 10px 0 8px 0;
         z-index: 1030;
-        box-shadow: 0 -4px 12px rgba(0,0,0,0.03);
+        box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
       }
 
       .mobile-nav-item {
@@ -51,48 +54,56 @@
         background: none;
         border: none;
         color: #64748b;
-        font-size: 0.68rem;
+        font-size: 0.7rem;
         font-weight: 600;
         padding: 2px 0;
+        transition: all 0.2s ease;
       }
 
       .mobile-nav-item i {
         display: block;
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         margin-bottom: 2px;
       }
 
       .mobile-nav-item.active {
-        color: var(--brand-primary);
+        color: var(--accent-blue);
       }
 
       .card-app {
         background: #ffffff;
         border: 1px solid var(--card-border);
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        border-radius: 14px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        margin-bottom: 16px;
+        overflow: hidden;
       }
 
       .card-app-header {
-        padding: 0.9rem 1.1rem;
+        padding: 0.85rem 1.1rem;
         border-bottom: 1px solid var(--card-border);
         background: #ffffff;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
       }
 
       .form-label {
         font-size: 0.72rem;
         font-weight: 700;
         color: #475569;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.35rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
       }
 
       .form-control, .form-select {
-        border-radius: 8px;
+        border-radius: 10px;
         border: 1px solid #cbd5e1;
-        padding: 0.6rem 0.8rem;
-        font-size: 0.88rem;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.9rem;
+      }
+
+      .form-control:focus, .form-select:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
       }
 
       .page-section {
@@ -102,39 +113,38 @@
         display: block;
       }
 
-      .table-app th {
-        font-size: 0.68rem;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-        color: #64748b;
-        background: #f8fafc;
-        padding: 0.65rem 0.75rem;
-        border-bottom: 1px solid var(--card-border);
-        white-space: nowrap;
-      }
-      .table-app td {
-        padding: 0.7rem 0.75rem;
-        font-size: 0.82rem;
-        vertical-align: middle;
-        border-bottom: 1px solid #f1f5f9;
-        color: #334155;
-        white-space: nowrap;
-      }
-
       .stat-card {
         padding: 1rem;
-        border-radius: 10px;
+        border-radius: 12px;
         background: #ffffff;
         border: 1px solid var(--card-border);
       }
 
-      .operator-section-header {
-        background-color: #f1f5f9;
-        font-weight: 700;
-        color: #0f172a;
-        padding: 0.6rem 0.75rem;
-        font-size: 0.85rem;
-        border-top: 2px solid var(--card-border);
+      /* KARTU KINERJA OPERATOR MODERN */
+      .op-card {
+        background: #ffffff;
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        margin-bottom: 12px;
+        padding: 12px 14px;
+      }
+
+      .op-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed #e2e8f0;
+      }
+      .op-item-row:last-child {
+        border-bottom: none;
+      }
+
+      .badge-custom {
+        font-size: 0.68rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 600;
       }
 
       @media print {
@@ -151,20 +161,20 @@
       const API_URL = "https://script.google.com/macros/s/AKfycbw1u9cDQdcmd7xmbfxa_D9y28YVFPy6G0hWNJTZvzcR1GTgtSWvCrgUAut9f51WlowP/exec";
     </script>
 
-    <!-- Header Navbar -->
+    <!-- Header Navbar Mobile -->
     <nav class="navbar navbar-mobile sticky-top px-3 py-2.5 no-print">
         <div class="container-fluid d-flex justify-content-between align-items-center p-0">
-            <div class="d-flex align-items-center gap-2">
-                <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:36px; height:36px;">
+            <div class="d-flex align-items-center gap-2.5">
+                <div class="bg-dark text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
                     <i class="bi bi-printer-fill fs-6"></i>
                 </div>
                 <div>
                     <h6 class="fw-bold mb-0 text-dark" id="pageTitleHeader">Input Order PO</h6>
-                    <small class="text-muted" style="font-size: 0.7rem;">Sistem Operasional Percetakan</small>
+                    <small class="text-muted" style="font-size: 0.68rem;">Sistem Operasional Percetakan</small>
                 </div>
             </div>
-            <button onclick="loadDashboardData()" class="btn btn-sm btn-light border fw-semibold px-2.5 py-1.5">
-                <i class="bi bi-arrow-clockwise"></i>
+            <button onclick="loadDashboardData()" class="btn btn-sm btn-light border fw-semibold px-2.5 py-1.5 rounded-3">
+                <i class="bi bi-arrow-clockwise me-1"></i> Refresh
             </button>
         </div>
     </nav>
@@ -184,7 +194,7 @@
         <div id="page-input-po" class="page-section active-page">
             <div class="card-app">
                 <div class="card-app-header">
-                    <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-plus-circle me-1.5"></i> Form Input Order Pesanan (PO)</h6>
+                    <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-plus-circle-fill me-1.5"></i> Form Order Pesanan Baru</h6>
                 </div>
                 <div class="card-body p-3">
                     <div id="alertBox" class="alert d-none rounded-3 py-2 px-3 small mb-3"></div>
@@ -206,16 +216,16 @@
                             <div class="col-12">
                                 <label class="form-label">PILIH CUP / DATAR</label>
                                 <select class="form-select" id="bahanSelect" onchange="onBahanSelected()" required>
-                                    <option value="">-- Pilih Cup / Bahan Baku --</option>
+                                    <option value="">-- Pilih Bahan Baku --</option>
                                 </select>
                             </div>
                             <div class="col-6">
                                 <label class="form-label">OZ (UKURAN)</label>
-                                <input type="text" class="form-control" id="ozInput" placeholder="Contoh: 12 oz, 14 oz">
+                                <input type="text" class="form-control" id="ozInput">
                             </div>
                             <div class="col-6">
                                 <label class="form-label">JENIS BAHAN</label>
-                                <input type="text" class="form-control" id="jenisInput" placeholder="Contoh: PET, Inject">
+                                <input type="text" class="form-control" id="jenisInput">
                             </div>
                             <div class="col-6">
                                 <label class="form-label">QUANTITY (PCS)</label>
@@ -223,7 +233,7 @@
                             </div>
                             <div class="col-6">
                                 <label class="form-label">JASA SABLON (RP/PCS)</label>
-                                <input type="number" class="form-control bg-light" id="tarif" readonly>
+                                <input type="number" class="form-control bg-light fw-bold" id="tarif" readonly>
                             </div>
                             <div class="col-6">
                                 <label class="form-label">OPERATOR / PEKERJA</label>
@@ -238,7 +248,7 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" id="btnSimpan" class="btn btn-primary w-100 py-2.5 fw-bold rounded-3 mt-3">
+                        <button type="submit" id="btnSimpan" class="btn btn-primary w-100 py-2.5 fw-bold rounded-3 mt-3 shadow-sm">
                             <i class="bi bi-save me-1"></i> Simpan Order PO
                         </button>
                     </form>
@@ -248,136 +258,53 @@
 
         <!-- ================= HALAMAN 2: RIWAYAT ORDER PO ================= -->
         <div id="page-data-po" class="page-section">
-            <div class="card-app">
+            <div class="card-app mb-2">
                 <div class="card-app-header d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-receipt me-1"></i> Riwayat Pesanan PO</h6>
-                    <span class="badge bg-primary rounded-pill" id="poCountBadge">0 PO</span>
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-receipt me-1.5"></i> Riwayat Order PO</h6>
+                    <span class="badge bg-primary rounded-pill px-2.5 py-1" id="poCountBadge">0 PO</span>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-app align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="ps-3">PO & Tgl</th>
-                                    <th>Café & Cup / OZ</th>
-                                    <th>Qty & Upah</th>
-                                    <th class="pe-3 text-center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="orders-body">
-                                <tr><td colspan="4" class="text-center py-4 text-muted">Memuat data order...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            </div>
+            <div id="orders-cards-container">
+                <div class="text-center py-4 text-muted">Memuat data order...</div>
             </div>
         </div>
 
         <!-- ================= HALAMAN 3: STOK GUDANG ================= -->
         <div id="page-stok" class="page-section">
             <div class="d-grid mb-3">
-                <button class="btn btn-success fw-bold py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
-                    <i class="bi bi-plus-circle me-1"></i> Input Stok In (Cup/Bahan Baru)
+                <button class="btn btn-success fw-bold py-2.5 shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
+                    <i class="bi bi-plus-circle me-1.5"></i> Input Stok In (Cup Baru)
                 </button>
             </div>
 
-            <div class="card-app mb-3">
+            <div class="card-app">
                 <div class="card-app-header">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-box-seam me-1 text-success"></i> Sisa Stok Gudang</h6>
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-box-seam me-1.5 text-success"></i> Sisa Stok Gudang</h6>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-app align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="ps-3">Cup / Merk Bahan</th>
-                                    <th class="text-end">Masuk</th>
-                                    <th class="text-end">Terpakai</th>
-                                    <th class="text-end pe-3">Sisa Stok</th>
-                                </tr>
-                            </thead>
-                            <tbody id="stok-body">
-                                <tr><td colspan="4" class="text-center py-4 text-muted">Memuat stok...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-app mb-3">
-                <div class="card-app-header">
-                    <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-person-badge me-1"></i> Tracking Operator Pemakai Stok</h6>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
-                        <table class="table table-app align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="ps-3">Operator</th>
-                                    <th>Bahan / Cup</th>
-                                    <th>Tgl & PO</th>
-                                    <th class="pe-3 text-end">Jumlah Pakai</th>
-                                </tr>
-                            </thead>
-                            <tbody id="stokOut-body">
-                                <tr><td colspan="4" class="text-center py-3 text-muted">Belum ada pemakaian stok.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="card-body p-2" id="stok-cards-container">
+                    <div class="text-center py-3 text-muted">Memuat stok...</div>
                 </div>
             </div>
 
             <div class="card-app">
                 <div class="card-app-header">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-arrow-down-left-square me-1 text-info"></i> Riwayat Stok Masuk</h6>
+                    <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-person-badge me-1.5"></i> Tracking Pemakai Stok</h6>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-                        <table class="table table-app align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="ps-3">Tgl</th>
-                                    <th>Bahan/Cup</th>
-                                    <th class="text-end">Masuk</th>
-                                    <th class="pe-3">Ket</th>
-                                </tr>
-                            </thead>
-                            <tbody id="stokIn-body">
-                                <tr><td colspan="4" class="text-center py-3 text-muted">Belum ada riwayat.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="card-body p-2" id="stokOut-cards-container">
+                    <div class="text-center py-3 text-muted">Belum ada pemakaian stok.</div>
                 </div>
             </div>
         </div>
 
         <!-- ================= HALAMAN 4: GAJI PEKERJA ================= -->
         <div id="page-gaji" class="page-section">
-            <div class="card-app">
-                <div class="card-app-header d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-wallet2 me-1 text-primary"></i> Rekap Upah Operator</h6>
+            <div class="card-app mb-2">
+                <div class="card-app-header">
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-wallet2 me-1.5 text-primary"></i> Rekap Upah Operator</h6>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-app align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="ps-3">TANGGAL</th>
-                                    <th>CAFÉ</th>
-                                    <th>CUP / DATAR</th>
-                                    <th class="text-center">OZ</th>
-                                    <th class="text-center">JENIS</th>
-                                    <th class="text-center">JASA</th>
-                                    <th class="text-end">QUANTITY</th>
-                                    <th class="text-end pe-3">TOTAL</th>
-                                </tr>
-                            </thead>
-                            <tbody id="gaji-body">
-                                <tr><td colspan="8" class="text-center py-4 text-muted">Memuat rekap gaji...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            </div>
+            <div id="gaji-cards-container">
+                <div class="text-center py-4 text-muted">Memuat rekap gaji...</div>
             </div>
         </div>
 
@@ -386,54 +313,36 @@
             <div class="row g-2 mb-3">
                 <div class="col-6">
                     <div class="stat-card">
-                        <small class="text-muted fw-semibold" style="font-size: 0.7rem;">TOTAL PRODUKSI</small>
+                        <small class="text-muted fw-bold" style="font-size: 0.65rem;">TOTAL PRODUKSI</small>
                         <h5 class="fw-bold mb-0 mt-1 text-primary" id="ownerTotalQty">0 pcs</h5>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="stat-card">
-                        <small class="text-muted fw-semibold" style="font-size: 0.7rem;">TOTAL UPAH OUT</small>
+                        <small class="text-muted fw-bold" style="font-size: 0.65rem;">TOTAL UPAH OUT</small>
                         <h5 class="fw-bold mb-0 mt-1 text-success" id="ownerTotalUpah">Rp 0</h5>
                     </div>
                 </div>
             </div>
 
-            <div class="card-app mb-3">
+            <div class="card-app mb-2">
                 <div class="card-app-header d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-table text-primary me-1.5"></i> Laporan Rinci Hasil Operator</h6>
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-line-fill text-primary me-1.5"></i> Ringkasan Hasil Operator</h6>
                     <span class="badge bg-light text-dark border fw-normal" id="ownerTotalOperator">0 Operator</span>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-app align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="ps-3">TANGGAL</th>
-                                    <th>CAFÉ</th>
-                                    <th>CUP / DATAR</th>
-                                    <th class="text-center">OZ</th>
-                                    <th class="text-center">JENIS</th>
-                                    <th class="text-center">JASA</th>
-                                    <th class="text-end">QUANTITY</th>
-                                    <th class="text-end pe-3">TOTAL</th>
-                                </tr>
-                            </thead>
-                            <tbody id="owner-body">
-                                <tr><td colspan="8" class="text-center py-4 text-muted">Memuat rekap...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            </div>
+            <div id="owner-cards-container">
+                <div class="text-center py-4 text-muted">Memuat ringkasan...</div>
             </div>
         </div>
 
     </div>
 
-    <!-- NAVBAR BOTTOM UNTUK HP -->
+    <!-- NAVBAR BOTTOM HP -->
     <div class="mobile-bottom-nav no-print">
         <button class="mobile-nav-item active" onclick="switchTab('input-po', 'Input Order PO', this)">
             <i class="bi bi-plus-square"></i>
-            <span>Input PO</span>
+            <span>Input</span>
         </button>
         <button class="mobile-nav-item" onclick="switchTab('data-po', 'Riwayat Order PO', this)">
             <i class="bi bi-receipt-cutoff"></i>
@@ -455,10 +364,10 @@
 
     <!-- MODAL INPUT STOK IN -->
     <div class="modal fade no-print" id="modalTambahStok" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+      <div class="modal-dialog modal-dialog-centered px-3">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 14px;">
           <div class="modal-header border-0 pb-0">
-            <h6 class="modal-title fw-bold fs-6"><i class="bi bi-box-arrow-in-down text-success me-1"></i> Input Stok In (Cup/Bahan Baru)</h6>
+            <h6 class="modal-title fw-bold fs-6"><i class="bi bi-box-arrow-in-down text-success me-1.5"></i> Input Stok In (Barang Baru)</h6>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form id="formTambahStok">
@@ -469,7 +378,7 @@
                         <input type="date" class="form-control" id="modalTanggalIn" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">NAMA CUP / MERK</label>
+                        <label class="form-label">NAMA CUP / MERK BAHAN</label>
                         <input type="text" class="form-control" id="modalNamaBahan" required>
                     </div>
                     <div class="col-6">
@@ -477,7 +386,7 @@
                         <input type="number" class="form-control" id="modalStokAwal" required>
                     </div>
                     <div class="col-6">
-                        <label class="form-label">TARIF JASA SABLON/PCS (RP)</label>
+                        <label class="form-label">TARIF JASA (RP)</label>
                         <input type="number" class="form-control" id="modalTarif" required>
                     </div>
                     <div class="col-12">
@@ -497,10 +406,10 @@
 
     <!-- MODAL CETAK SLIP GAJI -->
     <div class="modal fade" id="modalPrintSlip" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+      <div class="modal-dialog modal-dialog-centered px-3">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 14px;">
           <div class="modal-header border-bottom no-print py-2.5">
-            <h6 class="modal-title fw-bold"><i class="bi bi-printer me-1.5"></i>Slip Gaji Operator</h6>
+            <h6 class="modal-title fw-bold"><i class="bi bi-printer me-1.5"></i> Slip Gaji Operator</h6>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body p-3" id="slipContent"></div>
@@ -518,7 +427,6 @@
 
     <script>
       let globalTarifMap = {};
-      let globalGajiData = [];
       let globalOrdersData = [];
 
       function switchTab(pageId, pageTitle, element) {
@@ -658,10 +566,11 @@
         });
       });
 
-      function renderExcelStyleTable(containerElement, ordersData) {
+      // TAMPILAN KARTU PRESISI UNTUK LAYAR HP
+      function renderOperatorCards(containerElement, ordersData) {
         containerElement.innerHTML = "";
         if (!ordersData || ordersData.length === 0) {
-          containerElement.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Belum ada data pengerjaan.</td></tr>';
+          containerElement.innerHTML = '<div class="text-center py-4 text-muted">Belum ada data pengerjaan.</div>';
           return;
         }
 
@@ -673,58 +582,67 @@
         });
 
         Object.keys(grouped).forEach(opName => {
-          const headerRow = document.createElement("tr");
-          headerRow.innerHTML = `
-            <td colspan="8" class="operator-section-header">
-              <div class="d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-person-fill me-1 text-primary"></i> OPERATOR: ${opName}</span>
-                <button class="btn btn-xs btn-outline-primary py-0 px-2 fw-bold" style="font-size:0.7rem;" onclick="printSlipGaji('${opName}')">
-                  <i class="bi bi-printer"></i> Slip Gaji
-                </button>
-              </div>
-            </td>
-          `;
-          containerElement.appendChild(headerRow);
-
           let totalOpQty = 0;
           let totalOpUpah = 0;
 
+          let itemHtml = "";
           grouped[opName].forEach(ord => {
             totalOpQty += Number(ord.qty || 0);
             totalOpUpah += Number(ord.totalUpah || 0);
 
-            const row = document.createElement("tr");
-            row.innerHTML = `
-              <td class="ps-3 text-muted" style="font-size:0.75rem;">${formatTanggalIndo(ord.tanggal)}</td>
-              <td class="fw-semibold text-dark">${ord.pelanggan}</td>
-              <td class="fw-semibold">${ord.bahan}</td>
-              <td class="text-center text-muted">${ord.oz || '-'}</td>
-              <td class="text-center"><span class="badge bg-light text-dark border">${ord.jenis || '-'}</span></td>
-              <td class="text-center text-muted">Rp ${Number(ord.tarif).toLocaleString('id-ID')}</td>
-              <td class="text-end fw-bold">${Number(ord.qty).toLocaleString('id-ID')}</td>
-              <td class="text-end pe-3 fw-bold text-primary">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</td>
+            itemHtml += `
+              <div class="op-item-row">
+                <div>
+                  <div class="fw-bold text-dark" style="font-size:0.85rem;">${ord.pelanggan}</div>
+                  <div class="text-muted" style="font-size:0.75rem;">
+                    ${ord.bahan} ${ord.oz ? '• ' + ord.oz : ''} ${ord.jenis ? '• ' + ord.jenis : ''}
+                  </div>
+                  <small class="text-muted" style="font-size:0.68rem;">Tgl: ${formatTanggalIndo(ord.tanggal)}</small>
+                </div>
+                <div class="text-end">
+                  <div class="fw-bold text-dark" style="font-size:0.85rem;">${Number(ord.qty).toLocaleString('id-ID')} pcs</div>
+                  <div class="fw-semibold text-primary" style="font-size:0.78rem;">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</div>
+                  <small class="text-muted" style="font-size:0.68rem;">@Rp ${Number(ord.tarif).toLocaleString('id-ID')}</small>
+                </div>
+              </div>
             `;
-            containerElement.appendChild(row);
           });
 
-          const footerRow = document.createElement("tr");
-          footerRow.className = "table-light fw-bold";
-          footerRow.innerHTML = `
-            <td colspan="6" class="ps-3 text-dark" style="font-size:0.75rem;">TOTAL KESELURUHAN (${opName})</td>
-            <td class="text-end text-dark">${totalOpQty.toLocaleString('id-ID')}</td>
-            <td class="text-end pe-3 text-success">Rp ${totalOpUpah.toLocaleString('id-ID')}</td>
+          const opCard = document.createElement("div");
+          opCard.className = "op-card shadow-sm";
+          opCard.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+              <div>
+                <span class="badge bg-dark text-white me-1.5" style="font-size:0.7rem;">OPERATOR</span>
+                <strong class="text-dark" style="font-size:0.95rem;">${opName}</strong>
+              </div>
+              <button class="btn btn-sm btn-outline-primary py-0 px-2 fw-semibold" style="font-size:0.72rem;" onclick="printSlipGaji('${opName}')">
+                <i class="bi bi-printer me-1"></i> Slip
+              </button>
+            </div>
+            
+            <div class="mb-2">
+              ${itemHtml}
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center pt-2 mt-1 border-top bg-light rounded-2 px-2 py-1.5">
+              <span class="fw-bold text-secondary" style="font-size:0.75rem;">TOTAL UPAH</span>
+              <div class="text-end">
+                <span class="fw-bold text-dark me-2" style="font-size:0.82rem;">${totalOpQty.toLocaleString('id-ID')} pcs</span>
+                <span class="fw-bold text-success" style="font-size:0.9rem;">Rp ${totalOpUpah.toLocaleString('id-ID')}</span>
+              </div>
+            </div>
           `;
-          containerElement.appendChild(footerRow);
+          containerElement.appendChild(opCard);
         });
       }
 
       function loadDashboardData() {
-        const tbodyOrders = document.getElementById("orders-body");
-        const tbodyStok = document.getElementById("stok-body");
-        const tbodyStokOut = document.getElementById("stokOut-body");
-        const tbodyStokIn = document.getElementById("stokIn-body");
-        const tbodyGaji = document.getElementById("gaji-body");
-        const tbodyOwner = document.getElementById("owner-body");
+        const ordersCardsContainer = document.getElementById("orders-cards-container");
+        const stokCardsContainer = document.getElementById("stok-cards-container");
+        const stokOutCardsContainer = document.getElementById("stokOut-cards-container");
+        const gajiCardsContainer = document.getElementById("gaji-cards-container");
+        const ownerCardsContainer = document.getElementById("owner-cards-container");
         const bahanSelect = document.getElementById("bahanSelect");
 
         fetch(API_URL)
@@ -732,71 +650,74 @@
           .then(res => {
             if (res.status === "success") {
               
-              globalGajiData = res.gaji || [];
               globalOrdersData = res.orders || [];
 
               document.getElementById("poCountBadge").innerText = `${globalOrdersData.length} PO`;
 
               globalTarifMap = {};
-              bahanSelect.innerHTML = '<option value="">-- Pilih Cup / Bahan Baku --</option>';
+              bahanSelect.innerHTML = '<option value="">-- Pilih Bahan Baku --</option>';
               if (res.tarif) {
                 res.tarif.forEach(item => {
                   globalTarifMap[item.namaBahan] = item.tarif;
                   const opt = document.createElement("option");
                   opt.value = item.namaBahan;
-                  opt.textContent = `${item.namaBahan} (Jasa: Rp ${item.tarif}/pcs)`;
+                  opt.textContent = `${item.namaBahan} (Rp ${item.tarif}/pcs)`;
                   bahanSelect.appendChild(opt);
                 });
               }
 
-              // 1. Render Order PO
-              tbodyOrders.innerHTML = "";
+              // 1. Render Kartu Riwayat Order PO
+              ordersCardsContainer.innerHTML = "";
               if (res.orders.length === 0) {
-                tbodyOrders.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Belum ada order.</td></tr>';
+                ordersCardsContainer.innerHTML = '<div class="text-center py-4 text-muted">Belum ada order.</div>';
               } else {
                 [...res.orders].reverse().forEach(ord => {
-                  const row = document.createElement("tr");
-
                   let statusBadge = "bg-warning text-dark";
                   if (ord.status === "Selesai") statusBadge = "bg-success text-white";
                   if (ord.status === "Pending") statusBadge = "bg-secondary text-white";
 
-                  row.innerHTML = `
-                    <td class="ps-3">
-                        <div class="fw-bold text-dark">${ord.noPO}</div>
-                        <small class="text-muted" style="font-size: 0.7rem;">${formatTanggalIndo(ord.tanggal)}</small>
-                    </td>
-                    <td>
-                        <div class="fw-semibold text-dark">${ord.pelanggan}</div>
-                        <small class="text-muted">${ord.bahan} (${ord.oz})</small>
-                    </td>
-                    <td>
-                        <div class="fw-bold">${Number(ord.qty).toLocaleString('id-ID')} <small class="fw-normal">pcs</small></div>
-                        <small class="text-primary fw-semibold">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</small>
-                    </td>
-                    <td class="pe-3 text-center">
-                      <select class="form-select form-select-sm border-0 fw-semibold ${statusBadge}" style="font-size: 0.7rem; padding: 2px 4px;" onchange="updateStatus(${ord.rowNum}, this.value)">
+                  const card = document.createElement("div");
+                  card.className = "card-app p-3 mb-2";
+                  card.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <div>
+                        <span class="fw-bold text-dark d-block" style="font-size:0.92rem;">${ord.noPO}</span>
+                        <small class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(ord.tanggal)}</small>
+                      </div>
+                      <select class="form-select form-select-sm border-0 fw-semibold ${statusBadge}" style="width:auto; font-size: 0.72rem; padding: 2px 8px;" onchange="updateStatus(${ord.rowNum}, this.value)">
                         <option value="Proses" ${ord.status === 'Proses' ? 'selected' : ''}>Proses</option>
                         <option value="Pending" ${ord.status === 'Pending' ? 'selected' : ''}>Pending</option>
                         <option value="Selesai" ${ord.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
                       </select>
-                    </td>
+                    </div>
+                    <div class="row g-1 small mb-1">
+                      <div class="col-7">
+                        <span class="text-muted d-block" style="font-size:0.68rem;">PELANGGAN</span>
+                        <strong class="text-dark">${ord.pelanggan}</strong>
+                      </div>
+                      <div class="col-5 text-end">
+                        <span class="text-muted d-block" style="font-size:0.68rem;">OPERATOR</span>
+                        <span class="badge bg-light text-dark border">${ord.pekerja}</span>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                      <span class="text-muted" style="font-size:0.78rem;">${ord.bahan} (${ord.qty.toLocaleString('id-ID')} pcs)</span>
+                      <strong class="text-primary" style="font-size:0.88rem;">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</strong>
+                    </div>
                   `;
-                  tbodyOrders.appendChild(row);
+                  ordersCardsContainer.appendChild(card);
                 });
               }
 
               // 2. Render Sisa Stok Gudang
-              tbodyStok.innerHTML = "";
+              stokCardsContainer.innerHTML = "";
               const warningBox = document.getElementById("stokWarningBox");
               const warningList = document.getElementById("stokWarningList");
               warningList.innerHTML = "";
               let hasWarning = false;
 
               res.stok.forEach(item => {
-                const row = document.createElement("tr");
                 const isCritical = item.sisaStok < 1000;
-                
                 if (isCritical) {
                   hasWarning = true;
                   const li = document.createElement("li");
@@ -804,60 +725,48 @@
                   warningList.appendChild(li);
                 }
 
-                const sisaClass = isCritical ? 'text-danger fw-bold' : 'text-success fw-bold';
+                const sisaColor = isCritical ? 'text-danger' : 'text-success';
 
-                row.innerHTML = `
-                  <td class="ps-3 fw-semibold">${item.namaBahan}</td>
-                  <td class="text-end text-muted">${Number(item.stokAwal).toLocaleString('id-ID')}</td>
-                  <td class="text-end text-muted">${Number(item.terpakai || 0).toLocaleString('id-ID')}</td>
-                  <td class="text-end pe-3 ${sisaClass}">${Number(item.sisaStok).toLocaleString('id-ID')}</td>
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "d-flex justify-content-between align-items-center p-2 mb-1 border-bottom";
+                itemDiv.innerHTML = `
+                  <div>
+                    <strong class="text-dark d-block" style="font-size:0.85rem;">${item.namaBahan}</strong>
+                    <small class="text-muted" style="font-size:0.68rem;">Masuk: ${Number(item.stokAwal).toLocaleString('id-ID')} | Pakai: ${Number(item.terpakai || 0).toLocaleString('id-ID')}</small>
+                  </div>
+                  <div class="text-end">
+                    <span class="fw-bold ${sisaColor}" style="font-size:0.95rem;">${Number(item.sisaStok).toLocaleString('id-ID')}</span>
+                    <small class="text-muted d-block" style="font-size:0.65rem;">sisa pcs</small>
+                  </div>
                 `;
-                tbodyStok.appendChild(row);
+                stokCardsContainer.appendChild(itemDiv);
               });
 
               if (hasWarning) warningBox.classList.remove("d-none");
               else warningBox.classList.add("d-none");
 
-              // 3. Render TRACKING OPERATOR PEMAKAI STOK
-              tbodyStokOut.innerHTML = "";
+              // 3. Render Tracking Pemakai Stok
+              stokOutCardsContainer.innerHTML = "";
               if (res.orders && res.orders.length > 0) {
                 [...res.orders].reverse().forEach(ord => {
-                  const row = document.createElement("tr");
-                  row.innerHTML = `
-                    <td class="ps-3 fw-bold text-dark">${ord.pekerja}</td>
-                    <td><span class="badge bg-light text-dark border">${ord.bahan}</span></td>
-                    <td>
-                      <div class="fw-semibold">${ord.pelanggan}</div>
-                      <small class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(ord.tanggal)} (${ord.noPO})</small>
-                    </td>
-                    <td class="pe-3 text-end fw-bold text-danger">-${Number(ord.qty).toLocaleString('id-ID')} pcs</td>
+                  const div = document.createElement("div");
+                  div.className = "d-flex justify-content-between align-items-center p-2 mb-1 border-bottom";
+                  div.innerHTML = `
+                    <div>
+                      <strong class="text-dark d-block" style="font-size:0.82rem;">${ord.pekerja}</strong>
+                      <small class="text-muted" style="font-size:0.68rem;">${ord.pelanggan} (${ord.bahan})</small>
+                    </div>
+                    <span class="fw-bold text-danger" style="font-size:0.85rem;">-${Number(ord.qty).toLocaleString('id-ID')} pcs</span>
                   `;
-                  tbodyStokOut.appendChild(row);
+                  stokOutCardsContainer.appendChild(div);
                 });
               } else {
-                tbodyStokOut.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada pemakaian stok.</td></tr>';
+                stokOutCardsContainer.innerHTML = '<div class="text-center py-3 text-muted">Belum ada pemakaian.</div>';
               }
 
-              // 4. Render Riwayat Stok Masuk
-              tbodyStokIn.innerHTML = "";
-              if (res.stokIn && res.stokIn.length > 0) {
-                [...res.stokIn].reverse().forEach(stk => {
-                  const row = document.createElement("tr");
-                  row.innerHTML = `
-                    <td class="ps-3 text-muted" style="font-size: 0.7rem;">${formatTanggalIndo(stk.tanggal)}</td>
-                    <td class="fw-semibold">${stk.namaBahan}</td>
-                    <td class="text-end fw-bold text-success">+${Number(stk.qtyMasuk).toLocaleString('id-ID')}</td>
-                    <td class="pe-3 text-muted small">${stk.ket}</td>
-                  `;
-                  tbodyStokIn.appendChild(row);
-                });
-              } else {
-                tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada riwayat.</td></tr>';
-              }
-
-              // 5 & 6. Render Gaji & Laporan Owner MODEL EXCEL 8 KOLOM
-              renderExcelStyleTable(tbodyGaji, res.orders);
-              renderExcelStyleTable(tbodyOwner, res.orders);
+              // 4 & 5. Render Gaji & Laporan Owner MODEL KARTU HP
+              renderOperatorCards(gajiCardsContainer, res.orders);
+              renderOperatorCards(ownerCardsContainer, res.orders);
 
               let grandTotalQty = res.orders.reduce((sum, o) => sum + Number(o.qty || 0), 0);
               let grandTotalUpah = res.orders.reduce((sum, o) => sum + Number(o.totalUpah || 0), 0);
@@ -896,7 +805,7 @@
             <tr>
               <td class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(o.tanggal)}</td>
               <td class="fw-semibold">${o.noPO}</td>
-              <td>${o.bahan} (${o.oz})</td>
+              <td>${o.bahan}</td>
               <td class="text-end">${Number(o.qty).toLocaleString('id-ID')}</td>
               <td class="text-end fw-semibold">Rp ${Number(o.totalUpah).toLocaleString('id-ID')}</td>
             </tr>
