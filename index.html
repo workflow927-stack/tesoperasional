@@ -22,9 +22,10 @@
 
     <div class="container pb-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 
-                <div class="card shadow-sm border-0">
+                <!-- BAGIAN 1: FORM INPUT ORDER PO -->
+                <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white py-3">
                         <h5 class="card-title mb-0 fw-bold">📝 Input Order Pesanan Baru (PO)</h5>
                     </div>
@@ -79,15 +80,48 @@
                     </div>
                 </div>
 
+                <!-- BAGIAN 2: MONITORING STOK GUDANG -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">📦 Monitoring Stok Gudang</h5>
+                        <button onclick="loadStokData()" class="btn btn-sm btn-outline-primary fw-bold">
+                            🔄 Refresh Stok
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-3">ID / Nama Bahan</th>
+                                        <th class="text-end">Stok Awal</th>
+                                        <th class="text-end">Terpakai</th>
+                                        <th class="text-end pe-3">Sisa Stok</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stok-body">
+                                    <tr>
+                                        <td colspan="4" class="text-center py-3 text-muted">Memuat data stok...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <!-- Script Pengirim Data (PERBAIKAN ADA DI SINI) -->
+    <!-- SCRIPT LOGIKA PEMROSESAN DATA -->
     <script>
-      // Set tanggal default ke hari ini
-      document.getElementById('tanggal').valueAsDate = new Date();
+      // 1. Set tanggal default ke hari ini & Ambil Data Stok Pertama Kali
+      document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('tanggal').valueAsDate = new Date();
+        loadStokData(); // Otomatis ambil data stok saat halaman dibuka
+      });
 
+      // 2. Fungsi Simpan Order PO ke Spreadsheet
       document.getElementById('formPO').addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -108,7 +142,6 @@
           status: document.getElementById('status').value
         };
 
-        // Mengirim data menggunakan text/plain agar bebas dari CORS Blokir
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -124,6 +157,9 @@
             // Reset form input
             document.getElementById('formPO').reset();
             document.getElementById('tanggal').valueAsDate = new Date();
+            
+            // Refresh tabel stok setelah input data baru
+            loadStokData();
           } else {
             throw new Error(res.message);
           }
@@ -139,6 +175,44 @@
           btn.innerHTML = '🚀 Simpan Order ke Database';
         });
       });
+
+      // 3. Fungsi Ambil Data Stok dari Apps Script (doGet)
+      function loadStokData() {
+        const tbody = document.getElementById("stok-body");
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">🔄 Memuat data stok terbaru...</td></tr>';
+
+        fetch(API_URL)
+          .then(response => response.json())
+          .then(res => {
+            if (res.status === "success") {
+              tbody.innerHTML = ""; 
+              
+              res.data.forEach(item => {
+                const row = document.createElement("tr");
+                
+                // Beri penanda warna merah tebal jika sisa stok kurang dari 1.000 pcs
+                const isCritical = item.sisaStok < 1000;
+                const badgeStyle = isCritical 
+                  ? 'class="text-end pe-3 fw-bold text-danger"' 
+                  : 'class="text-end pe-3 fw-bold text-success"';
+
+                row.innerHTML = `
+                  <td class="ps-3 fw-semibold">${item.idBahan}</td>
+                  <td class="text-end">${Number(item.stokAwal).toLocaleString('id-ID')}</td>
+                  <td class="text-end text-muted">${Number(item.terpakai).toLocaleString('id-ID')}</td>
+                  <td ${badgeStyle}>${Number(item.sisaStok).toLocaleString('id-ID')} Pcs</td>
+                `;
+                tbody.appendChild(row);
+              });
+            } else {
+              tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger py-3">Gagal memuat stok: ${res.message}</td></tr>`;
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-3">Gagal terhubung ke server database.</td></tr>';
+          });
+      }
     </script>
 </body>
 </html>
