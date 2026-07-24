@@ -14,38 +14,42 @@
     <style>
       :root {
         --bs-font-sans-serif: 'Plus Jakarta Sans', sans-serif;
-        --bg-main: #f1f5f9;
-        --card-border: #e2e8f0;
-        --brand-primary: #1e293b;
-        --accent-blue: #2563eb;
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --brand-accent: #2563eb;
+        --text-main: #0f172a;
+        --text-sub: #64748b;
       }
 
       body {
         font-family: var(--bs-font-sans-serif);
         background-color: var(--bg-main);
-        color: #0f172a;
-        padding-bottom: 90px;
+        color: var(--text-main);
+        padding-bottom: 95px;
         -webkit-font-smoothing: antialiased;
       }
 
+      /* Navbar Top Sleek */
       .navbar-mobile {
-        background: #ffffff;
-        border-bottom: 1px solid var(--card-border);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #e2e8f0;
       }
 
+      /* Floating Bottom Navigation */
       .mobile-bottom-nav {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
         background: #ffffff;
-        border-top: 1px solid var(--card-border);
+        border-radius: 20px;
         display: flex;
         justify-content: space-around;
-        padding: 10px 0 8px 0;
+        padding: 8px 6px;
         z-index: 1030;
-        box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+        border: 1px solid #f1f5f9;
       }
 
       .mobile-nav-item {
@@ -53,11 +57,12 @@
         text-align: center;
         background: none;
         border: none;
-        color: #64748b;
-        font-size: 0.7rem;
-        font-weight: 600;
-        padding: 2px 0;
-        transition: all 0.2s ease;
+        color: #94a3b8;
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 4px 0;
+        border-radius: 12px;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .mobile-nav-item i {
@@ -67,43 +72,76 @@
       }
 
       .mobile-nav-item.active {
-        color: var(--accent-blue);
+        color: var(--brand-accent);
+        background-color: #eff6ff;
       }
 
-      .card-app {
-        background: #ffffff;
-        border: 1px solid var(--card-border);
-        border-radius: 14px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-        margin-bottom: 16px;
-        overflow: hidden;
-      }
-
-      .card-app-header {
-        padding: 0.85rem 1.1rem;
-        border-bottom: 1px solid var(--card-border);
-        background: #ffffff;
+      /* Card Styling Modern */
+      .card-custom {
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+        margin-bottom: 14px;
+        padding: 16px;
       }
 
       .form-label {
-        font-size: 0.72rem;
-        font-weight: 700;
+        font-size: 0.7rem;
+        font-weight: 800;
         color: #475569;
-        margin-bottom: 0.35rem;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
+        margin-bottom: 0.4rem;
+        letter-spacing: 0.03em;
       }
 
       .form-control, .form-select {
-        border-radius: 10px;
-        border: 1px solid #cbd5e1;
-        padding: 0.65rem 0.85rem;
-        font-size: 0.9rem;
+        border-radius: 12px;
+        border: 1.5px solid #e2e8f0;
+        padding: 0.7rem 0.9rem;
+        font-size: 0.88rem;
+        font-weight: 500;
+        background-color: #f8fafc;
       }
 
       .form-control:focus, .form-select:focus {
-        border-color: var(--accent-blue);
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        background-color: #ffffff;
+        border-color: var(--brand-accent);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      /* Stat Widget Modern */
+      .stat-box {
+        background: #ffffff;
+        padding: 14px;
+        border-radius: 16px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      }
+
+      /* Operator Item Cards */
+      .op-card-header {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 10px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .op-item-box {
+        background: #ffffff;
+        border: 1px solid #f1f5f9;
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 8px;
+      }
+
+      .badge-pill-custom {
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 20px;
       }
 
       .page-section {
@@ -111,40 +149,6 @@
       }
       .page-section.active-page {
         display: block;
-      }
-
-      .stat-card {
-        padding: 1rem;
-        border-radius: 12px;
-        background: #ffffff;
-        border: 1px solid var(--card-border);
-      }
-
-      /* KARTU KINERJA OPERATOR MODERN */
-      .op-card {
-        background: #ffffff;
-        border: 1px solid var(--card-border);
-        border-radius: 12px;
-        margin-bottom: 12px;
-        padding: 12px 14px;
-      }
-
-      .op-item-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px dashed #e2e8f0;
-      }
-      .op-item-row:last-child {
-        border-bottom: none;
-      }
-
-      .badge-custom {
-        font-size: 0.68rem;
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-weight: 600;
       }
 
       @media print {
@@ -165,24 +169,24 @@
     <nav class="navbar navbar-mobile sticky-top px-3 py-2.5 no-print">
         <div class="container-fluid d-flex justify-content-between align-items-center p-0">
             <div class="d-flex align-items-center gap-2.5">
-                <div class="bg-dark text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
-                    <i class="bi bi-printer-fill fs-6"></i>
+                <div class="bg-primary bg-gradient text-white rounded-4 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width:40px; height:40px;">
+                    <i class="bi bi-printer-fill fs-5"></i>
                 </div>
                 <div>
-                    <h6 class="fw-bold mb-0 text-dark" id="pageTitleHeader">Input Order PO</h6>
-                    <small class="text-muted" style="font-size: 0.68rem;">Sistem Operasional Percetakan</small>
+                    <h6 class="fw-extrabold mb-0 text-dark" id="pageTitleHeader" style="font-weight:800;">Input Order PO</h6>
+                    <small class="text-muted fw-semibold" style="font-size: 0.68rem;">Sistem Percetakan Modern</small>
                 </div>
             </div>
-            <button onclick="loadDashboardData()" class="btn btn-sm btn-light border fw-semibold px-2.5 py-1.5 rounded-3">
-                <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+            <button onclick="loadDashboardData()" class="btn btn-sm btn-light border-0 fw-bold px-3 py-1.5 rounded-3 shadow-sm bg-white">
+                <i class="bi bi-arrow-clockwise text-primary me-1"></i> Refresh
             </button>
         </div>
     </nav>
 
-    <div class="container py-3 no-print">
+    <div class="container py-3 no-print" style="max-width: 600px;">
 
         <!-- ALERT STOK CRITICAL -->
-        <div id="stokWarningBox" class="alert alert-danger border-0 shadow-sm rounded-3 d-none mb-3" role="alert">
+        <div id="stokWarningBox" class="alert alert-danger border-0 shadow-sm rounded-4 d-none mb-3" role="alert">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-exclamation-triangle-fill fs-6"></i>
                 <strong class="small">Perhatian: Stok Bahan Baku Menipis!</strong>
@@ -192,105 +196,99 @@
 
         <!-- ================= HALAMAN 1: INPUT PO ================= -->
         <div id="page-input-po" class="page-section active-page">
-            <div class="card-app">
-                <div class="card-app-header">
-                    <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-plus-circle-fill me-1.5"></i> Form Order Pesanan Baru</h6>
+            <div class="card-custom">
+                <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                    <i class="bi bi-plus-circle-fill text-primary fs-5"></i>
+                    <h6 class="fw-bold mb-0 text-dark">Form Order Pesanan Baru</h6>
                 </div>
-                <div class="card-body p-3">
-                    <div id="alertBox" class="alert d-none rounded-3 py-2 px-3 small mb-3"></div>
+                
+                <div id="alertBox" class="alert d-none rounded-3 py-2 px-3 small mb-3"></div>
 
-                    <form id="formPO">
-                        <div class="row g-2.5">
-                            <div class="col-6">
-                                <label class="form-label">TANGGAL</label>
-                                <input type="date" class="form-control" id="tanggal" required>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">NO. PO / INVOICE</label>
-                                <input type="text" class="form-control" id="noPO" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">NAMA CAFÉ / PELANGGAN</label>
-                                <input type="text" class="form-control" id="pelanggan" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">PILIH CUP / DATAR</label>
-                                <select class="form-select" id="bahanSelect" onchange="onBahanSelected()" required>
-                                    <option value="">-- Pilih Bahan Baku --</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">OZ (UKURAN)</label>
-                                <input type="text" class="form-control" id="ozInput">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">JENIS BAHAN</label>
-                                <input type="text" class="form-control" id="jenisInput">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">QUANTITY (PCS)</label>
-                                <input type="number" class="form-control" id="qty" required>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">JASA SABLON (RP/PCS)</label>
-                                <input type="number" class="form-control bg-light fw-bold" id="tarif" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">OPERATOR / PEKERJA</label>
-                                <input type="text" class="form-control" id="pekerja" required>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">STATUS ORDER</label>
-                                <select class="form-select" id="status">
-                                    <option value="Proses" selected>Proses</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Selesai">Selesai</option>
-                                </select>
-                            </div>
+                <form id="formPO">
+                    <div class="row g-2.5">
+                        <div class="col-6">
+                            <label class="form-label">TANGGAL</label>
+                            <input type="date" class="form-control" id="tanggal" required>
                         </div>
-                        <button type="submit" id="btnSimpan" class="btn btn-primary w-100 py-2.5 fw-bold rounded-3 mt-3 shadow-sm">
-                            <i class="bi bi-save me-1"></i> Simpan Order PO
-                        </button>
-                    </form>
-                </div>
+                        <div class="col-6">
+                            <label class="form-label">NO. PO / INVOICE</label>
+                            <input type="text" class="form-control" id="noPO" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">NAMA CAFÉ / PELANGGAN</label>
+                            <input type="text" class="form-control" id="pelanggan" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">PILIH CUP / BAHAN</label>
+                            <select class="form-select" id="bahanSelect" onchange="onBahanSelected()" required>
+                                <option value="">-- Pilih Bahan Baku --</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">OZ (UKURAN)</label>
+                            <input type="text" class="form-control" id="ozInput">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">JENIS BAHAN</label>
+                            <input type="text" class="form-control" id="jenisInput">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">QUANTITY (PCS)</label>
+                            <input type="number" class="form-control" id="qty" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">JASA SABLON (RP)</label>
+                            <input type="number" class="form-control bg-light fw-bold text-primary" id="tarif" readonly>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">OPERATOR / PEKERJA</label>
+                            <input type="text" class="form-control" id="pekerja" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">STATUS ORDER</label>
+                            <select class="form-select" id="status">
+                                <option value="Proses" selected>Proses</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Selesai">Selesai</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" id="btnSimpan" class="btn btn-primary w-100 py-3 fw-bold rounded-3 mt-4 shadow-sm" style="font-size:0.95rem;">
+                        <i class="bi bi-save2-fill me-1.5"></i> Simpan Order PO
+                    </button>
+                </form>
             </div>
         </div>
 
         <!-- ================= HALAMAN 2: RIWAYAT ORDER PO ================= -->
         <div id="page-data-po" class="page-section">
-            <div class="card-app mb-2">
-                <div class="card-app-header d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-receipt me-1.5"></i> Riwayat Order PO</h6>
-                    <span class="badge bg-primary rounded-pill px-2.5 py-1" id="poCountBadge">0 PO</span>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-receipt me-1.5 text-primary"></i> Riwayat Order Pesanan</h6>
+                <span class="badge bg-primary rounded-pill px-3 py-1.5" id="poCountBadge">0 PO</span>
             </div>
             <div id="orders-cards-container">
-                <div class="text-center py-4 text-muted">Memuat data order...</div>
+                <div class="text-center py-5 text-muted">Memuat data order...</div>
             </div>
         </div>
 
         <!-- ================= HALAMAN 3: STOK GUDANG ================= -->
         <div id="page-stok" class="page-section">
             <div class="d-grid mb-3">
-                <button class="btn btn-success fw-bold py-2.5 shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
-                    <i class="bi bi-plus-circle me-1.5"></i> Input Stok In (Cup Baru)
+                <button class="btn btn-success fw-bold py-3 shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
+                    <i class="bi bi-box-arrow-in-down me-1.5"></i> Input Stok In Baru
                 </button>
             </div>
 
-            <div class="card-app">
-                <div class="card-app-header">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-box-seam me-1.5 text-success"></i> Sisa Stok Gudang</h6>
-                </div>
-                <div class="card-body p-2" id="stok-cards-container">
+            <div class="card-custom">
+                <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-box-seam text-success me-2"></i> Sisa Stok Gudang</h6>
+                <div id="stok-cards-container">
                     <div class="text-center py-3 text-muted">Memuat stok...</div>
                 </div>
             </div>
 
-            <div class="card-app">
-                <div class="card-app-header">
-                    <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-person-badge me-1.5"></i> Tracking Pemakai Stok</h6>
-                </div>
-                <div class="card-body p-2" id="stokOut-cards-container">
+            <div class="card-custom">
+                <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-person-badge text-danger me-2"></i> Pemakaian Stok per Operator</h6>
+                <div id="stokOut-cards-container">
                     <div class="text-center py-3 text-muted">Belum ada pemakaian stok.</div>
                 </div>
             </div>
@@ -298,13 +296,11 @@
 
         <!-- ================= HALAMAN 4: GAJI PEKERJA ================= -->
         <div id="page-gaji" class="page-section">
-            <div class="card-app mb-2">
-                <div class="card-app-header">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-wallet2 me-1.5 text-primary"></i> Rekap Upah Operator</h6>
-                </div>
+            <div class="mb-3 px-1">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-wallet2 text-primary me-2"></i> Rekap Hasil & Gaji Operator</h6>
             </div>
             <div id="gaji-cards-container">
-                <div class="text-center py-4 text-muted">Memuat rekap gaji...</div>
+                <div class="text-center py-5 text-muted">Memuat rekap gaji...</div>
             </div>
         </div>
 
@@ -312,40 +308,39 @@
         <div id="page-owner" class="page-section">
             <div class="row g-2 mb-3">
                 <div class="col-6">
-                    <div class="stat-card">
-                        <small class="text-muted fw-bold" style="font-size: 0.65rem;">TOTAL PRODUKSI</small>
-                        <h5 class="fw-bold mb-0 mt-1 text-primary" id="ownerTotalQty">0 pcs</h5>
+                    <div class="stat-box">
+                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.65rem;">TOTAL PRODUKSI</small>
+                        <h5 class="fw-extrabold mb-0 text-primary" style="font-weight:800;" id="ownerTotalQty">0 pcs</h5>
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="stat-card">
-                        <small class="text-muted fw-bold" style="font-size: 0.65rem;">TOTAL UPAH OUT</small>
-                        <h5 class="fw-bold mb-0 mt-1 text-success" id="ownerTotalUpah">Rp 0</h5>
+                    <div class="stat-box">
+                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.65rem;">TOTAL UPAH OUT</small>
+                        <h5 class="fw-extrabold mb-0 text-success" style="font-weight:800;" id="ownerTotalUpah">Rp 0</h5>
                     </div>
                 </div>
             </div>
 
-            <div class="card-app mb-2">
-                <div class="card-app-header d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-line-fill text-primary me-1.5"></i> Ringkasan Hasil Operator</h6>
-                    <span class="badge bg-light text-dark border fw-normal" id="ownerTotalOperator">0 Operator</span>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i> Laporan Rinci Ringkasan</h6>
+                <span class="badge bg-light text-dark border fw-semibold" id="ownerTotalOperator">0 Operator</span>
             </div>
+
             <div id="owner-cards-container">
-                <div class="text-center py-4 text-muted">Memuat ringkasan...</div>
+                <div class="text-center py-5 text-muted">Memuat ringkasan...</div>
             </div>
         </div>
 
     </div>
 
-    <!-- NAVBAR BOTTOM HP -->
+    <!-- Floating Bottom Navigation Modern -->
     <div class="mobile-bottom-nav no-print">
         <button class="mobile-nav-item active" onclick="switchTab('input-po', 'Input Order PO', this)">
-            <i class="bi bi-plus-square"></i>
+            <i class="bi bi-plus-circle"></i>
             <span>Input</span>
         </button>
         <button class="mobile-nav-item" onclick="switchTab('data-po', 'Riwayat Order PO', this)">
-            <i class="bi bi-receipt-cutoff"></i>
+            <i class="bi bi-receipt"></i>
             <span>Data PO</span>
         </button>
         <button class="mobile-nav-item" onclick="switchTab('stok', 'Stok Gudang', this)">
@@ -365,7 +360,7 @@
     <!-- MODAL INPUT STOK IN -->
     <div class="modal fade no-print" id="modalTambahStok" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered px-3">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 14px;">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
           <div class="modal-header border-0 pb-0">
             <h6 class="modal-title fw-bold fs-6"><i class="bi bi-box-arrow-in-down text-success me-1.5"></i> Input Stok In (Barang Baru)</h6>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -396,8 +391,8 @@
                 </div>
             </div>
             <div class="modal-footer border-0 pt-0">
-              <button type="button" class="btn btn-light btn-sm fw-semibold" data-bs-dismiss="modal">Batal</button>
-              <button type="submit" id="btnSimpanStok" class="btn btn-success btn-sm fw-bold px-3">Simpan Stok In</button>
+              <button type="button" class="btn btn-light btn-sm fw-semibold rounded-3" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" id="btnSimpanStok" class="btn btn-success btn-sm fw-bold px-3 rounded-3">Simpan Stok In</button>
             </div>
           </form>
         </div>
@@ -407,15 +402,15 @@
     <!-- MODAL CETAK SLIP GAJI -->
     <div class="modal fade" id="modalPrintSlip" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered px-3">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 14px;">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
           <div class="modal-header border-bottom no-print py-2.5">
             <h6 class="modal-title fw-bold"><i class="bi bi-printer me-1.5"></i> Slip Gaji Operator</h6>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body p-3" id="slipContent"></div>
           <div class="modal-footer border-top no-print py-2">
-            <button type="button" class="btn btn-light btn-sm fw-semibold" data-bs-dismiss="modal">Tutup</button>
-            <button type="button" class="btn btn-primary btn-sm fw-bold" onclick="window.print()">
+            <button type="button" class="btn btn-light btn-sm fw-semibold rounded-3" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary btn-sm fw-bold rounded-3" onclick="window.print()">
                 <i class="bi bi-printer-fill me-1"></i> Cetak / Save PDF
             </button>
           </div>
@@ -507,7 +502,7 @@
         .then(res => res.json())
         .then(res => {
           if(res.status === "success") {
-            alertBox.className = "alert alert-success d-block";
+            alertBox.className = "alert alert-success d-block rounded-3";
             alertBox.innerText = "✅ Order PO Berhasil Disimpan!";
             
             document.getElementById('formPO').reset();
@@ -515,13 +510,13 @@
             loadDashboardData();
           } else { throw new Error(res.message); }
           btn.disabled = false;
-          btn.innerHTML = '<i class="bi bi-save me-1"></i> Simpan Order PO';
+          btn.innerHTML = '<i class="bi bi-save2-fill me-1.5"></i> Simpan Order PO';
         })
         .catch(error => {
-          alertBox.className = "alert alert-danger d-block";
+          alertBox.className = "alert alert-danger d-block rounded-3";
           alertBox.innerText = "❌ Gagal: " + error.message;
           btn.disabled = false;
-          btn.innerHTML = '<i class="bi bi-save me-1"></i> Simpan Order PO';
+          btn.innerHTML = '<i class="bi bi-save2-fill me-1.5"></i> Simpan Order PO';
         });
       });
 
@@ -566,11 +561,11 @@
         });
       });
 
-      // TAMPILAN KARTU PRESISI UNTUK LAYAR HP
+      // RENDER OPERATOR CARD CLEAN & ELEGANT
       function renderOperatorCards(containerElement, ordersData) {
         containerElement.innerHTML = "";
         if (!ordersData || ordersData.length === 0) {
-          containerElement.innerHTML = '<div class="text-center py-4 text-muted">Belum ada data pengerjaan.</div>';
+          containerElement.innerHTML = '<div class="text-center py-5 text-muted">Belum ada data pengerjaan.</div>';
           return;
         }
 
@@ -591,33 +586,38 @@
             totalOpUpah += Number(ord.totalUpah || 0);
 
             itemHtml += `
-              <div class="op-item-row">
-                <div>
-                  <div class="fw-bold text-dark" style="font-size:0.85rem;">${ord.pelanggan}</div>
-                  <div class="text-muted" style="font-size:0.75rem;">
-                    ${ord.bahan} ${ord.oz ? '• ' + ord.oz : ''} ${ord.jenis ? '• ' + ord.jenis : ''}
+              <div class="op-item-box">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                  <div>
+                    <strong class="text-dark d-block" style="font-size:0.88rem;">${ord.pelanggan}</strong>
+                    <div class="text-muted" style="font-size:0.75rem;">
+                      <span class="badge bg-light text-dark border me-1">${ord.bahan}</span>
+                      ${ord.oz ? '<span class="badge bg-light text-muted border me-1">' + ord.oz + '</span>' : ''}
+                      ${ord.jenis ? '<span class="badge bg-light text-muted border">' + ord.jenis + '</span>' : ''}
+                    </div>
                   </div>
-                  <small class="text-muted" style="font-size:0.68rem;">Tgl: ${formatTanggalIndo(ord.tanggal)}</small>
+                  <div class="text-end">
+                    <strong class="text-primary d-block" style="font-size:0.88rem;">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</strong>
+                    <small class="text-muted" style="font-size:0.7rem;">${Number(ord.qty).toLocaleString('id-ID')} pcs @Rp${ord.tarif}</small>
+                  </div>
                 </div>
-                <div class="text-end">
-                  <div class="fw-bold text-dark" style="font-size:0.85rem;">${Number(ord.qty).toLocaleString('id-ID')} pcs</div>
-                  <div class="fw-semibold text-primary" style="font-size:0.78rem;">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</div>
-                  <small class="text-muted" style="font-size:0.68rem;">@Rp ${Number(ord.tarif).toLocaleString('id-ID')}</small>
+                <div class="text-muted pt-1 border-top" style="font-size:0.68rem;">
+                  <i class="bi bi-calendar3 me-1"></i> ${formatTanggalIndo(ord.tanggal)}
                 </div>
               </div>
             `;
           });
 
           const opCard = document.createElement("div");
-          opCard.className = "op-card shadow-sm";
+          opCard.className = "card-custom";
           opCard.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+            <div class="op-card-header">
               <div>
-                <span class="badge bg-dark text-white me-1.5" style="font-size:0.7rem;">OPERATOR</span>
-                <strong class="text-dark" style="font-size:0.95rem;">${opName}</strong>
+                <small class="text-muted fw-bold d-block" style="font-size:0.65rem;">OPERATOR</small>
+                <strong class="text-dark fs-6">${opName}</strong>
               </div>
-              <button class="btn btn-sm btn-outline-primary py-0 px-2 fw-semibold" style="font-size:0.72rem;" onclick="printSlipGaji('${opName}')">
-                <i class="bi bi-printer me-1"></i> Slip
+              <button class="btn btn-sm btn-outline-primary fw-bold py-1 px-3 rounded-3" style="font-size:0.75rem;" onclick="printSlipGaji('${opName}')">
+                <i class="bi bi-printer me-1"></i> Slip Gaji
               </button>
             </div>
             
@@ -625,11 +625,11 @@
               ${itemHtml}
             </div>
 
-            <div class="d-flex justify-content-between align-items-center pt-2 mt-1 border-top bg-light rounded-2 px-2 py-1.5">
-              <span class="fw-bold text-secondary" style="font-size:0.75rem;">TOTAL UPAH</span>
+            <div class="d-flex justify-content-between align-items-center pt-2 mt-2 border-top">
+              <span class="fw-bold text-muted" style="font-size:0.78rem;">TOTAL DITERIMA</span>
               <div class="text-end">
-                <span class="fw-bold text-dark me-2" style="font-size:0.82rem;">${totalOpQty.toLocaleString('id-ID')} pcs</span>
-                <span class="fw-bold text-success" style="font-size:0.9rem;">Rp ${totalOpUpah.toLocaleString('id-ID')}</span>
+                <span class="fw-bold text-dark me-2" style="font-size:0.85rem;">${totalOpQty.toLocaleString('id-ID')} pcs</span>
+                <span class="fw-extrabold text-success" style="font-size:0.95rem; font-weight:800;">Rp ${totalOpUpah.toLocaleString('id-ID')}</span>
               </div>
             </div>
           `;
@@ -666,10 +666,10 @@
                 });
               }
 
-              // 1. Render Kartu Riwayat Order PO
+              // 1. Render Order PO (Kartu Modern)
               ordersCardsContainer.innerHTML = "";
               if (res.orders.length === 0) {
-                ordersCardsContainer.innerHTML = '<div class="text-center py-4 text-muted">Belum ada order.</div>';
+                ordersCardsContainer.innerHTML = '<div class="text-center py-5 text-muted">Belum ada order.</div>';
               } else {
                 [...res.orders].reverse().forEach(ord => {
                   let statusBadge = "bg-warning text-dark";
@@ -677,39 +677,42 @@
                   if (ord.status === "Pending") statusBadge = "bg-secondary text-white";
 
                   const card = document.createElement("div");
-                  card.className = "card-app p-3 mb-2";
+                  card.className = "card-custom";
                   card.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
                       <div>
-                        <span class="fw-bold text-dark d-block" style="font-size:0.92rem;">${ord.noPO}</span>
+                        <strong class="text-dark d-block fs-6">${ord.noPO}</strong>
                         <small class="text-muted" style="font-size:0.7rem;">${formatTanggalIndo(ord.tanggal)}</small>
                       </div>
-                      <select class="form-select form-select-sm border-0 fw-semibold ${statusBadge}" style="width:auto; font-size: 0.72rem; padding: 2px 8px;" onchange="updateStatus(${ord.rowNum}, this.value)">
+                      <select class="form-select form-select-sm border-0 fw-bold ${statusBadge} rounded-3" style="width:auto; font-size: 0.7rem; padding: 3px 10px;" onchange="updateStatus(${ord.rowNum}, this.value)">
                         <option value="Proses" ${ord.status === 'Proses' ? 'selected' : ''}>Proses</option>
                         <option value="Pending" ${ord.status === 'Pending' ? 'selected' : ''}>Pending</option>
                         <option value="Selesai" ${ord.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
                       </select>
                     </div>
-                    <div class="row g-1 small mb-1">
+                    <div class="row g-1 mb-2">
                       <div class="col-7">
-                        <span class="text-muted d-block" style="font-size:0.68rem;">PELANGGAN</span>
-                        <strong class="text-dark">${ord.pelanggan}</strong>
+                        <small class="text-muted d-block" style="font-size:0.65rem;">PELANGGAN</small>
+                        <strong class="text-dark" style="font-size:0.85rem;">${ord.pelanggan}</strong>
                       </div>
                       <div class="col-5 text-end">
-                        <span class="text-muted d-block" style="font-size:0.68rem;">OPERATOR</span>
+                        <small class="text-muted d-block" style="font-size:0.65rem;">OPERATOR</small>
                         <span class="badge bg-light text-dark border">${ord.pekerja}</span>
                       </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                      <span class="text-muted" style="font-size:0.78rem;">${ord.bahan} (${ord.qty.toLocaleString('id-ID')} pcs)</span>
-                      <strong class="text-primary" style="font-size:0.88rem;">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</strong>
+                      <div>
+                        <span class="fw-semibold text-dark d-block" style="font-size:0.8rem;">${ord.bahan}</span>
+                        <small class="text-muted" style="font-size:0.7rem;">${ord.qty.toLocaleString('id-ID')} pcs</small>
+                      </div>
+                      <strong class="text-primary fs-6">Rp ${Number(ord.totalUpah).toLocaleString('id-ID')}</strong>
                     </div>
                   `;
                   ordersCardsContainer.appendChild(card);
                 });
               }
 
-              // 2. Render Sisa Stok Gudang
+              // 2. Render Sisa Stok
               stokCardsContainer.innerHTML = "";
               const warningBox = document.getElementById("stokWarningBox");
               const warningList = document.getElementById("stokWarningList");
@@ -728,14 +731,14 @@
                 const sisaColor = isCritical ? 'text-danger' : 'text-success';
 
                 const itemDiv = document.createElement("div");
-                itemDiv.className = "d-flex justify-content-between align-items-center p-2 mb-1 border-bottom";
+                itemDiv.className = "d-flex justify-content-between align-items-center p-2 mb-2 bg-light rounded-3";
                 itemDiv.innerHTML = `
                   <div>
                     <strong class="text-dark d-block" style="font-size:0.85rem;">${item.namaBahan}</strong>
-                    <small class="text-muted" style="font-size:0.68rem;">Masuk: ${Number(item.stokAwal).toLocaleString('id-ID')} | Pakai: ${Number(item.terpakai || 0).toLocaleString('id-ID')}</small>
+                    <small class="text-muted" style="font-size:0.68rem;">Masuk: ${Number(item.stokAwal).toLocaleString('id-ID')} | Terpakai: ${Number(item.terpakai || 0).toLocaleString('id-ID')}</small>
                   </div>
                   <div class="text-end">
-                    <span class="fw-bold ${sisaColor}" style="font-size:0.95rem;">${Number(item.sisaStok).toLocaleString('id-ID')}</span>
+                    <span class="fw-bold ${sisaColor} fs-6">${Number(item.sisaStok).toLocaleString('id-ID')}</span>
                     <small class="text-muted d-block" style="font-size:0.65rem;">sisa pcs</small>
                   </div>
                 `;
@@ -745,7 +748,7 @@
               if (hasWarning) warningBox.classList.remove("d-none");
               else warningBox.classList.add("d-none");
 
-              // 3. Render Tracking Pemakai Stok
+              // 3. Pemakaian Stok per Operator
               stokOutCardsContainer.innerHTML = "";
               if (res.orders && res.orders.length > 0) {
                 [...res.orders].reverse().forEach(ord => {
@@ -764,7 +767,7 @@
                 stokOutCardsContainer.innerHTML = '<div class="text-center py-3 text-muted">Belum ada pemakaian.</div>';
               }
 
-              // 4 & 5. Render Gaji & Laporan Owner MODEL KARTU HP
+              // 4 & 5. Render Gaji & Laporan Owner
               renderOperatorCards(gajiCardsContainer, res.orders);
               renderOperatorCards(ownerCardsContainer, res.orders);
 
