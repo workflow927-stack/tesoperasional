@@ -29,11 +29,18 @@
         -webkit-font-smoothing: antialiased;
       }
 
+      /* Base Layout Container */
+      .app-container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
       .navbar-mobile {
         background: #ffffff;
         border-bottom: 1px solid #e2e8f0;
       }
 
+      /* Floating Nav khusus HP */
       .mobile-bottom-nav {
         position: fixed;
         bottom: 12px;
@@ -49,17 +56,20 @@
         border: 1px solid #f1f5f9;
       }
 
-      .mobile-nav-item {
-        flex: 1;
-        text-align: center;
+      .mobile-nav-item, .desktop-nav-item {
         background: none;
         border: none;
         color: #94a3b8;
-        font-size: 0.68rem;
         font-weight: 700;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .mobile-nav-item {
+        flex: 1;
+        text-align: center;
+        font-size: 0.68rem;
         padding: 4px 0;
         border-radius: 12px;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .mobile-nav-item i {
@@ -68,11 +78,16 @@
         margin-bottom: 2px;
       }
 
-      .mobile-nav-item.active {
+      .mobile-nav-item.active, .desktop-nav-item.active {
         color: var(--brand-accent);
         background-color: #eff6ff;
       }
 
+      .desktop-nav-menu {
+        display: none;
+      }
+
+      /* Card Styling Modern */
       .card-custom {
         background: var(--card-bg);
         border-radius: 16px;
@@ -147,6 +162,64 @@
         100% { transform: rotate(360deg); }
       }
 
+      /* ========================================================= */
+      /* 🖥️ KUSTOMISASI KHUSUS DESKTOP & LAPTOP (LAYAR > 992px)   */
+      /* ========================================================= */
+      @media (min-width: 992px) {
+        body {
+          padding-bottom: 30px;
+        }
+
+        .app-container {
+          max-width: 1200px; /* Melebar di Layar Laptop */
+        }
+
+        .mobile-bottom-nav {
+          display: none !important; /* Sembunyikan Nav Bawah HP */
+        }
+
+        .desktop-nav-menu {
+          display: flex !important;
+          gap: 8px;
+        }
+
+        .desktop-nav-item {
+          padding: 8px 16px;
+          border-radius: 10px;
+          font-size: 0.85rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .card-custom {
+          padding: 24px;
+          border-radius: 20px;
+        }
+
+        /* Tampilan Grid Card Order di Laptop */
+        #orders-cards-container {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+          gap: 16px;
+        }
+
+        #orders-cards-container .card-custom {
+          margin-bottom: 0;
+        }
+
+        /* Tampilan Grid Stok di Laptop */
+        #stok-cards-container {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+
+        #stok-cards-container > div {
+          margin-bottom: 0 !important;
+        }
+      }
+
       @media print {
         body * { visibility: hidden; }
         #modalPrintSlip, #modalPrintSlip * { visibility: visible; }
@@ -161,28 +234,51 @@
       const API_URL = "https://script.google.com/macros/s/AKfycbw1u9cDQdcmd7xmbfxa_D9y28YVFPy6G0hWNJTZvzcR1GTgtSWvCrgUAut9f51WlowP/exec";
     </script>
 
-    <!-- Header Navbar Mobile -->
-    <nav class="navbar navbar-mobile sticky-top px-3 py-2 no-print">
-        <div class="container-fluid d-flex justify-content-between align-items-center p-0">
-            <div class="d-flex align-items-center gap-2">
-                <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; flex-shrink:0;">
-                    <i class="bi bi-printer-fill fs-6"></i>
+    <!-- Header Navbar Responsif (Desktop & Mobile) -->
+    <nav class="navbar navbar-mobile sticky-top px-3 py-2.5 no-print">
+        <div class="container-fluid app-container d-flex justify-content-between align-items-center p-0">
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center" style="width:36px; height:36px; flex-shrink:0;">
+                        <i class="bi bi-printer-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark" id="pageTitleHeader" style="font-size:1.05rem;">Input Order PO</h6>
+                        <small class="text-muted fw-semibold" style="font-size: 0.68rem;">Sistem Percetakan Modern</small>
+                    </div>
                 </div>
-                <div>
-                    <h6 class="fw-bold mb-0 text-dark" id="pageTitleHeader" style="font-size:0.95rem;">Input Order PO</h6>
-                    <small class="text-muted fw-semibold" style="font-size: 0.65rem;">Sistem Percetakan Modern</small>
+
+                <!-- Menu Tab Atas Khusus Laptop / PC -->
+                <div class="desktop-nav-menu ms-4">
+                    <button class="desktop-nav-item active" onclick="switchTab('input-po', 'Input Order PO', this)">
+                        <i class="bi bi-plus-circle"></i> Input PO
+                    </button>
+                    <button class="desktop-nav-item" onclick="switchTab('data-po', 'Riwayat Order PO', this)">
+                        <i class="bi bi-receipt"></i> Data PO
+                    </button>
+                    <button class="desktop-nav-item" onclick="switchTab('stok', 'Stok Gudang', this)">
+                        <i class="bi bi-boxes"></i> Stok Gudang
+                    </button>
+                    <button class="desktop-nav-item" onclick="switchTab('gaji', 'Gaji Pekerja', this)">
+                        <i class="bi bi-wallet2"></i> Gaji Pekerja
+                    </button>
+                    <button class="desktop-nav-item" onclick="switchTab('owner', 'Laporan Owner', this)">
+                        <i class="bi bi-bar-chart-line-fill"></i> Laporan Owner
+                    </button>
                 </div>
             </div>
-            <button id="btnRefresh" onclick="loadDashboardData(true)" class="btn btn-sm btn-light border fw-bold px-2.5 py-1 rounded-3 bg-white" style="font-size:0.75rem;">
+
+            <!-- Tombol Refresh -->
+            <button id="btnRefresh" onclick="loadDashboardData(true)" class="btn btn-sm btn-light border fw-bold px-3 py-1.5 rounded-3 bg-white shadow-sm" style="font-size:0.8rem;">
                 <i id="iconRefresh" class="bi bi-arrow-clockwise text-primary me-1"></i> <span id="textRefresh">Refresh</span>
             </button>
         </div>
     </nav>
 
-    <div class="container py-3 no-print" style="max-width: 600px;">
+    <div class="container py-3 no-print app-container">
 
         <!-- NOTIFIKASI TOAST REFRESH -->
-        <div id="toastNotif" class="alert alert-info border-0 shadow-sm rounded-3 d-none py-2 px-3 small mb-2 text-center" role="alert">
+        <div id="toastNotif" class="alert alert-info border-0 shadow-sm rounded-3 d-none py-2 px-3 small mb-3 text-center" role="alert">
             <i class="bi bi-check-circle-fill me-1 text-success"></i> Data berhasil disinkronkan!
         </div>
 
@@ -200,52 +296,52 @@
             <div class="card-custom">
                 <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
                     <i class="bi bi-plus-circle-fill text-primary fs-5"></i>
-                    <h6 class="fw-bold mb-0 text-dark">Form Order Pesanan Baru</h6>
+                    <h6 class="fw-bold mb-0 text-dark fs-6">Form Order Pesanan Baru</h6>
                 </div>
                 
                 <div id="alertBox" class="alert d-none rounded-3 py-2 px-3 small mb-3"></div>
 
                 <form id="formPO">
-                    <div class="row g-2.5">
-                        <div class="col-6">
+                    <div class="row g-3">
+                        <div class="col-md-6 col-6">
                             <label class="form-label">TANGGAL</label>
                             <input type="date" class="form-control" id="tanggal" required>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-6">
                             <label class="form-label">NO. PO / INVOICE</label>
                             <input type="text" class="form-control" id="noPO" required>
                         </div>
-                        <div class="col-12">
+                        <div class="col-md-6 col-12">
                             <label class="form-label">NAMA CAFÉ / PELANGGAN</label>
                             <input type="text" class="form-control" id="pelanggan" required>
                         </div>
-                        <div class="col-12">
+                        <div class="col-md-6 col-12">
                             <label class="form-label">PILIH CUP / BAHAN</label>
                             <select class="form-select" id="bahanSelect" onchange="onBahanSelected()" required>
                                 <option value="">-- Pilih Bahan Baku --</option>
                             </select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-3 col-6">
                             <label class="form-label">OZ (UKURAN)</label>
                             <input type="text" class="form-control" id="ozInput">
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-3 col-6">
                             <label class="form-label">JENIS BAHAN</label>
                             <input type="text" class="form-control" id="jenisInput">
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-6">
                             <label class="form-label">QUANTITY (PCS)</label>
                             <input type="number" class="form-control" id="qty" required>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-4 col-6">
                             <label class="form-label">JASA SABLON (RP)</label>
                             <input type="number" class="form-control bg-light fw-bold text-primary" id="tarif" readonly>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-4 col-6">
                             <label class="form-label">OPERATOR / PEKERJA</label>
                             <input type="text" class="form-control" id="pekerja" required>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-4 col-6">
                             <label class="form-label">STATUS ORDER</label>
                             <select class="form-select" id="status">
                                 <option value="Proses" selected>Proses</option>
@@ -274,8 +370,8 @@
 
         <!-- ================= HALAMAN 3: STOK GUDANG ================= -->
         <div id="page-stok" class="page-section">
-            <div class="d-grid mb-3">
-                <button class="btn btn-success fw-bold py-3 shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-success fw-bold py-2.5 px-4 shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
                     <i class="bi bi-box-arrow-in-down me-1.5"></i> Input Stok In Baru
                 </button>
             </div>
@@ -307,24 +403,24 @@
 
         <!-- ================= HALAMAN 5: LAPORAN OWNER ================= -->
         <div id="page-owner" class="page-section">
-            <div class="row g-2 mb-3">
-                <div class="col-6">
-                    <div class="card-custom p-3 mb-0">
-                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.65rem;">TOTAL PRODUKSI</small>
-                        <h5 class="fw-bold mb-0 text-primary" id="ownerTotalQty">0 pcs</h5>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6 col-6">
+                    <div class="card-custom p-3.5 mb-0">
+                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.7rem;">TOTAL PRODUKSI</small>
+                        <h4 class="fw-bold mb-0 text-primary" id="ownerTotalQty">0 pcs</h4>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="card-custom p-3 mb-0">
-                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.65rem;">TOTAL UPAH OUT</small>
-                        <h5 class="fw-bold mb-0 text-success" id="ownerTotalUpah">Rp 0</h5>
+                <div class="col-md-6 col-6">
+                    <div class="card-custom p-3.5 mb-0">
+                        <small class="text-muted fw-bold d-block mb-1" style="font-size: 0.7rem;">TOTAL UPAH OUT</small>
+                        <h4 class="fw-bold mb-0 text-success" id="ownerTotalUpah">Rp 0</h4>
                     </div>
                 </div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3 px-1">
                 <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i> Laporan Detail Owner</h6>
-                <span class="badge bg-light text-dark border fw-semibold" id="ownerTotalOperator">0 Operator</span>
+                <span class="badge bg-light text-dark border fw-semibold px-3 py-1.5" id="ownerTotalOperator">0 Operator</span>
             </div>
 
             <div id="owner-tables-container">
@@ -334,7 +430,7 @@
 
     </div>
 
-    <!-- Bottom Navigation -->
+    <!-- Floating Nav Khusus Tampilan Mobile/HP -->
     <div class="mobile-bottom-nav no-print">
         <button class="mobile-nav-item active" onclick="switchTab('input-po', 'Input Order PO', this)">
             <i class="bi bi-plus-circle"></i>
@@ -428,10 +524,13 @@
 
       function switchTab(pageId, pageTitle, element) {
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
-        document.querySelectorAll('.mobile-nav-item').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.mobile-nav-item, .desktop-nav-item').forEach(btn => btn.classList.remove('active'));
 
         document.getElementById(`page-${pageId}`).classList.add('active-page');
-        element.classList.add('active');
+        
+        // Sinkronkan active state tombol desktop & mobile
+        document.querySelectorAll(`[onclick*="'${pageId}'"]`).forEach(el => el.classList.add('active'));
+
         document.getElementById('pageTitleHeader').innerText = pageTitle;
         window.scrollTo(0,0);
       }
@@ -462,10 +561,7 @@
         document.getElementById('tanggal').valueAsDate = new Date();
         document.getElementById('modalTanggalIn').valueAsDate = new Date();
         
-        // 🚀 Buka data cepat dari memori cache HP
         loadFromCache();
-        
-        // Ambil data terbaru di background
         loadDashboardData(false);
       });
 
@@ -497,7 +593,6 @@
 
       document.getElementById('formPO').addEventListener('submit', function(e) {
         e.preventDefault();
-        const btn = document.getElementById('btnSimpan');
         const alertBox = document.getElementById('alertBox');
         
         const payload = {
@@ -514,7 +609,6 @@
           status: document.getElementById('status').value
         };
 
-        // 🚀 INSTANT UPDATE UI
         globalOrdersData.push(payload);
         renderAllData({ orders: globalOrdersData, stok: globalStokData, tarif: Object.keys(globalTarifMap).map(k => ({namaBahan:k, tarif:globalTarifMap[k]})) });
 
@@ -523,7 +617,6 @@
         document.getElementById('formPO').reset();
         document.getElementById('tanggal').valueAsDate = new Date();
 
-        // Latar Belakang Kirim ke Google
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -647,7 +740,7 @@
                 </tfoot>
               </table>
             </div>
-            <small class="text-muted d-block mt-1" style="font-size:0.65rem;">* Geser tabel ke kanan/kiri untuk melihat seluruh kolom.</small>
+            <small class="text-muted d-block mt-1" style="font-size:0.65rem;">* Geser tabel ke kanan/kiri jika kolom belum muat seluruhnya.</small>
           `;
           containerElement.appendChild(tableWrapper);
         });
@@ -683,7 +776,7 @@
         // 1. Render PO
         ordersCardsContainer.innerHTML = "";
         if (globalOrdersData.length === 0) {
-          ordersCardsContainer.innerHTML = '<div class="text-center py-5 text-muted">Belum ada order.</div>';
+          ordersCardsContainer.innerHTML = '<div class="text-center py-5 text-muted col-12">Belum ada order.</div>';
         } else {
           [...globalOrdersData].reverse().forEach(ord => {
             let statusBadge = "bg-warning text-dark";
@@ -746,14 +839,14 @@
             const sisaColor = isCritical ? 'text-danger' : 'text-success';
 
             const itemDiv = document.createElement("div");
-            itemDiv.className = "d-flex justify-content-between align-items-center p-2 mb-2 bg-light rounded-3";
+            itemDiv.className = "d-flex justify-content-between align-items-center p-3 border rounded-3 bg-light";
             itemDiv.innerHTML = `
               <div>
-                <strong class="text-dark d-block" style="font-size:0.85rem;">${item.namaBahan}</strong>
-                <small class="text-muted" style="font-size:0.68rem;">Masuk: ${Number(item.stokAwal).toLocaleString('id-ID')} | Terpakai: ${Number(item.terpakai || 0).toLocaleString('id-ID')}</small>
+                <strong class="text-dark d-block" style="font-size:0.9rem;">${item.namaBahan}</strong>
+                <small class="text-muted" style="font-size:0.72rem;">Masuk: ${Number(item.stokAwal).toLocaleString('id-ID')} | Terpakai: ${Number(item.terpakai || 0).toLocaleString('id-ID')}</small>
               </div>
               <div class="text-end">
-                <span class="fw-bold ${sisaColor} fs-6">${Number(item.sisaStok).toLocaleString('id-ID')}</span>
+                <span class="fw-bold ${sisaColor} fs-5">${Number(item.sisaStok).toLocaleString('id-ID')}</span>
                 <small class="text-muted d-block" style="font-size:0.65rem;">sisa pcs</small>
               </div>
             `;
@@ -911,7 +1004,7 @@
                 <strong>(${namaPekerja})</strong>
               </div>
               <div>
-                <span class="text-muted">Admin / Bendahara,</span><br><br><br>
+                <span class="text-muted">Admin,</span><br><br><br>
                 <strong>( ........................ )</strong>
               </div>
             </div>
