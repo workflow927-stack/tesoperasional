@@ -23,16 +23,14 @@
         font-family: var(--bs-font-sans-serif);
         background-color: var(--bg-main);
         color: #1e293b;
-        padding-bottom: 80px; /* Margin agar menu bawah HP tidak menutupi isi */
+        padding-bottom: 80px;
       }
 
-      /* Top Bar Navbar */
       .navbar-mobile {
         background: #ffffff;
         border-bottom: 1px solid var(--card-border);
       }
 
-      /* Bottom Nav Menu */
       .mobile-bottom-nav {
         position: fixed;
         bottom: 0;
@@ -68,7 +66,6 @@
         color: var(--brand-primary);
       }
 
-      /* Card & Form Styles */
       .card-app {
         background: #ffffff;
         border: 1px solid var(--card-border);
@@ -85,7 +82,7 @@
       }
 
       .form-label {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 700;
         color: #475569;
         margin-bottom: 0.3rem;
@@ -94,11 +91,10 @@
       .form-control, .form-select {
         border-radius: 8px;
         border: 1px solid #cbd5e1;
-        padding: 0.65rem 0.85rem;
-        font-size: 0.9rem;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.88rem;
       }
 
-      /* Page Display Logic */
       .page-section {
         display: none;
       }
@@ -106,25 +102,23 @@
         display: block;
       }
 
-      /* Table Styles - Clean Typography */
       .table-app th {
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         text-transform: uppercase;
         letter-spacing: 0.03em;
         color: #64748b;
         background: #f8fafc;
-        padding: 0.75rem 0.85rem;
+        padding: 0.75rem 0.8rem;
         border-bottom: 1px solid var(--card-border);
       }
       .table-app td {
-        padding: 0.85rem;
-        font-size: 0.875rem;
+        padding: 0.8rem;
+        font-size: 0.85rem;
         vertical-align: middle;
         border-bottom: 1px solid #f1f5f9;
         color: #334155;
       }
 
-      /* Owner Stat Cards */
       .stat-card {
         padding: 1rem;
         border-radius: 10px;
@@ -195,30 +189,29 @@
                                 <input type="text" class="form-control" id="noPO" placeholder="PO-001" required>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">NAMA PELANGGAN / TOKO</label>
-                                <input type="text" class="form-control" id="pelanggan" placeholder="Nama Pemesan" required>
+                                <label class="form-label">NAMA CAFÉ / PELANGGAN</label>
+                                <input type="text" class="form-control" id="pelanggan" placeholder="Contoh: BCL / BAJA / IJES" required>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">PILIH BAHAN BAKU</label>
+                                <label class="form-label">PILIH CUP / BAHAN BAKU</label>
                                 <select class="form-select" id="bahanSelect" onchange="onBahanSelected()" required>
-                                    <option value="">-- Pilih Bahan Baku --</option>
+                                    <option value="">-- Pilih Cup / Bahan Baku --</option>
                                 </select>
-                                <small class="text-muted" style="font-size:0.7rem;">*Isi bahan baku lewat menu Stok In jika belum ada</small>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">JUMLAH ORDER (QTY)</label>
-                                <input type="number" class="form-control" id="qty" placeholder="0" required>
+                                <label class="form-label">QUANTITY (PCS)</label>
+                                <input type="number" class="form-control" id="qty" placeholder="4000" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">TARIF (RP/PCS)</label>
-                                <input type="number" class="form-control bg-light" id="tarif" readonly placeholder="Otomatis">
+                                <label class="form-label">JASA SABLON (RP/PCS)</label>
+                                <input type="number" class="form-control bg-light" id="tarif" readonly placeholder="35">
                             </div>
                             <div class="col-6">
                                 <label class="form-label">OPERATOR / PEKERJA</label>
-                                <input type="text" class="form-control" id="pekerja" placeholder="Nama Pekerja" required>
+                                <input type="text" class="form-control" id="pekerja" placeholder="Contoh: FADLI" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">STATUS AWAL</label>
+                                <label class="form-label">STATUS ORDER</label>
                                 <select class="form-select" id="status">
                                     <option value="Proses" selected>Proses</option>
                                     <option value="Pending">Pending</option>
@@ -247,7 +240,7 @@
                             <thead>
                                 <tr>
                                     <th class="ps-3">PO & Tgl</th>
-                                    <th>Pelanggan / Bahan</th>
+                                    <th>Café & Cup / OZ</th>
                                     <th>Qty & Upah</th>
                                     <th class="pe-3 text-center">Status</th>
                                 </tr>
@@ -265,7 +258,7 @@
         <div id="page-stok" class="page-section">
             <div class="d-grid mb-3">
                 <button class="btn btn-success fw-bold py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
-                    <i class="bi bi-plus-circle me-1"></i> Input Stok In (Barang Masuk)
+                    <i class="bi bi-plus-circle me-1"></i> Input Stok In (Cup/Bahan Baru)
                 </button>
             </div>
 
@@ -279,7 +272,7 @@
                         <table class="table table-app align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th class="ps-3">Nama Bahan</th>
+                                    <th class="ps-3">Cup / Merk Bahan</th>
                                     <th class="text-end">Masuk</th>
                                     <th class="text-end">Terpakai</th>
                                     <th class="text-end pe-3">Sisa Stok</th>
@@ -304,7 +297,7 @@
                             <thead>
                                 <tr>
                                     <th class="ps-3">Tgl</th>
-                                    <th>Bahan</th>
+                                    <th>Bahan/Cup</th>
                                     <th class="text-end">Masuk</th>
                                     <th class="pe-3">Ket</th>
                                 </tr>
@@ -329,7 +322,7 @@
                         <table class="table table-app align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th class="ps-3">Nama Pekerja</th>
+                                    <th class="ps-3">Nama Operator</th>
                                     <th class="text-end">Total Pcs</th>
                                     <th class="text-end">Total Upah</th>
                                     <th class="text-center pe-3">Action</th>
@@ -344,7 +337,7 @@
             </div>
         </div>
 
-        <!-- ================= HALAMAN 5: LAPORAN OWNER (BARU) ================= -->
+        <!-- ================= HALAMAN 5: LAPORAN OWNER ================= -->
         <div id="page-owner" class="page-section">
             <div class="row g-2 mb-3">
                 <div class="col-6">
@@ -363,7 +356,7 @@
 
             <div class="card-app mb-3">
                 <div class="card-app-header d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-fill text-primary me-1.5"></i> Performa Hasil Pekerja</h6>
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-fill text-primary me-1.5"></i> Performa Hasil Operator</h6>
                     <span class="badge bg-light text-dark border fw-normal" id="ownerTotalOperator">0 Operator</span>
                 </div>
                 <div class="card-body p-0">
@@ -372,7 +365,7 @@
                             <thead>
                                 <tr>
                                     <th class="ps-3">Operator</th>
-                                    <th class="text-end">Hasil Barang</th>
+                                    <th class="text-end">Hasil (Pcs)</th>
                                     <th class="text-end pe-3">Total Upah</th>
                                 </tr>
                             </thead>
@@ -416,7 +409,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
           <div class="modal-header border-0 pb-0">
-            <h6 class="modal-title fw-bold fs-6"><i class="bi bi-box-arrow-in-down text-success me-1"></i> Input Stok In (Barang Masuk)</h6>
+            <h6 class="modal-title fw-bold fs-6"><i class="bi bi-box-arrow-in-down text-success me-1"></i> Input Stok In (Cup/Bahan Baru)</h6>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form id="formTambahStok">
@@ -427,16 +420,16 @@
                         <input type="date" class="form-control" id="modalTanggalIn" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">NAMA BAHAN BAKU / CUP</label>
-                        <input type="text" class="form-control" id="modalNamaBahan" placeholder="Contoh: Cup 16oz Oval" required>
+                        <label class="form-label">NAMA CUP / MERK & OZ (CONTOH: STARINDO 12 PET)</label>
+                        <input type="text" class="form-control" id="modalNamaBahan" placeholder="Contoh: STARINDO - 12 (PET) / LIBRA - 14 (INJECT)" required>
                     </div>
                     <div class="col-6">
                         <label class="form-label">JUMLAH MASUK (PCS)</label>
                         <input type="number" class="form-control" id="modalStokAwal" placeholder="10000" required>
                     </div>
                     <div class="col-6">
-                        <label class="form-label">TARIF UPAH/PCS (RP)</label>
-                        <input type="number" class="form-control" id="modalTarif" placeholder="55" required>
+                        <label class="form-label">TARIF JASA SABLON/PCS (RP)</label>
+                        <input type="number" class="form-control" id="modalTarif" placeholder="35" required>
                     </div>
                     <div class="col-12">
                         <label class="form-label">KETERANGAN / SUPLIER</label>
@@ -479,7 +472,6 @@
       let globalGajiData = [];
       let globalOrdersData = [];
 
-      // Switch Page / Tab Logic
       function switchTab(pageId, pageTitle, element) {
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
         document.querySelectorAll('.mobile-nav-item').forEach(btn => btn.classList.remove('active'));
@@ -490,7 +482,6 @@
         window.scrollTo(0,0);
       }
 
-      // Helper Format Tanggal Indonesia (DD-MM-YYYY)
       function formatTanggalIndo(rawDate) {
         if (!rawDate) return "-";
         let d;
@@ -529,7 +520,6 @@
         }
       }
 
-      // Submit Order PO
       document.getElementById('formPO').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('btnSimpan');
@@ -576,7 +566,6 @@
         });
       });
 
-      // Submit Form Stok In
       document.getElementById('formTambahStok').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('btnSimpanStok');
@@ -618,7 +607,6 @@
         });
       });
 
-      // Load All Data
       function loadDashboardData() {
         const tbodyOrders = document.getElementById("orders-body");
         const tbodyStok = document.getElementById("stok-body");
@@ -637,20 +625,18 @@
 
               document.getElementById("poCountBadge").innerText = `${globalOrdersData.length} PO`;
 
-              // 1. Dropdown Bahan
               globalTarifMap = {};
-              bahanSelect.innerHTML = '<option value="">-- Pilih Bahan Baku --</option>';
+              bahanSelect.innerHTML = '<option value="">-- Pilih Cup / Bahan Baku --</option>';
               if (res.tarif) {
                 res.tarif.forEach(item => {
                   globalTarifMap[item.namaBahan] = item.tarif;
                   const opt = document.createElement("option");
                   opt.value = item.namaBahan;
-                  opt.textContent = `${item.namaBahan} (Rp ${item.tarif}/pcs)`;
+                  opt.textContent = `${item.namaBahan} (Jasa: Rp ${item.tarif}/pcs)`;
                   bahanSelect.appendChild(opt);
                 });
               }
 
-              // 2. Table Order PO
               tbodyOrders.innerHTML = "";
               if (res.orders.length === 0) {
                 tbodyOrders.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Belum ada order.</td></tr>';
@@ -668,7 +654,7 @@
                         <small class="text-muted" style="font-size: 0.7rem;">${formatTanggalIndo(ord.tanggal)}</small>
                     </td>
                     <td>
-                        <div class="fw-semibold">${ord.pelanggan}</div>
+                        <div class="fw-semibold text-dark">${ord.pelanggan}</div>
                         <small class="text-muted">${ord.bahan}</small>
                     </td>
                     <td>
@@ -687,7 +673,6 @@
                 });
               }
 
-              // 3. Ringkasan Stok Gudang & Warning
               tbodyStok.innerHTML = "";
               const warningBox = document.getElementById("stokWarningBox");
               const warningList = document.getElementById("stokWarningList");
@@ -719,7 +704,6 @@
               if (hasWarning) warningBox.classList.remove("d-none");
               else warningBox.classList.add("d-none");
 
-              // 4. Riwayat Stok In
               tbodyStokIn.innerHTML = "";
               if (res.stokIn && res.stokIn.length > 0) {
                 [...res.stokIn].reverse().forEach(stk => {
@@ -736,7 +720,6 @@
                 tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Belum ada riwayat.</td></tr>';
               }
 
-              // 5. Rekap Gaji & Slip Gaji
               tbodyGaji.innerHTML = "";
               res.gaji.forEach(item => {
                 const row = document.createElement("tr");
@@ -753,7 +736,6 @@
                 tbodyGaji.appendChild(row);
               });
 
-              // 6. LAPORAN OWNER
               tbodyOwner.innerHTML = "";
               let grandTotalQty = 0;
               let grandTotalUpah = 0;
@@ -793,7 +775,6 @@
         });
       }
 
-      // Tampilkan Slip Gaji
       function printSlipGaji(namaPekerja) {
         const filterOrders = globalOrdersData.filter(o => o.pekerja.toLowerCase() === namaPekerja.toLowerCase());
         const totalPcs = filterOrders.reduce((sum, o) => sum + Number(o.qty), 0);
@@ -817,7 +798,7 @@
             <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
               <div>
                 <h6 class="fw-bold mb-0 text-dark">PRINTFLOW</h6>
-                <small class="text-muted" style="font-size:0.7rem;">Slip Gaji Pekerja</small>
+                <small class="text-muted" style="font-size:0.7rem;">Slip Gaji Pekerja / Operator</small>
               </div>
               <span class="badge bg-primary px-2 py-1">CONFIRMED</span>
             </div>
@@ -838,7 +819,7 @@
                 <tr>
                   <th>Tgl</th>
                   <th>PO</th>
-                  <th>Bahan</th>
+                  <th>Cup/Bahan</th>
                   <th class="text-end">Qty</th>
                   <th class="text-end">Upah</th>
                 </tr>
