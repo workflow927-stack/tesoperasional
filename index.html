@@ -9,7 +9,7 @@
 <body class="bg-light">
 
     <script>
-      // Ganti dengan URL Aplikasi Web dari Apps Script Anda
+      // URL Apps Script Anda
       const API_URL = "https://script.google.com/macros/s/AKfycbw1u9cDQdcmd7xmbfxa_D9y28YVFPy6G0hWNJTZvzcR1GTgtSWvCrgUAut9f51WlowP/exec";
     </script>
 
@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <!-- Script Pengirim Data -->
+    <!-- Script Pengirim Data (PERBAIKAN ADA DI SINI) -->
     <script>
       // Set tanggal default ke hari ini
       document.getElementById('tanggal').valueAsDate = new Date();
@@ -108,27 +108,31 @@
           status: document.getElementById('status').value
         };
 
+        // Mengirim data menggunakan text/plain agar bebas dari CORS Blokir
         fetch(API_URL, {
           method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         })
-        .then(() => {
-          alertBox.className = "alert alert-success";
-          alertBox.innerText = "✅ Data Order PO Berhasil Disimpan!";
-          alertBox.classList.remove('d-none');
-          
-          // Reset form input
-          document.getElementById('formPO').reset();
-          document.getElementById('tanggal').valueAsDate = new Date();
-          
+        .then(response => response.json())
+        .then(res => {
+          if(res.status === "success") {
+            alertBox.className = "alert alert-success";
+            alertBox.innerText = "✅ Data Order PO Berhasil Disimpan!";
+            alertBox.classList.remove('d-none');
+            
+            // Reset form input
+            document.getElementById('formPO').reset();
+            document.getElementById('tanggal').valueAsDate = new Date();
+          } else {
+            throw new Error(res.message);
+          }
           btn.disabled = false;
           btn.innerHTML = '🚀 Simpan Order ke Database';
         })
         .catch(error => {
           alertBox.className = "alert alert-danger";
-          alertBox.innerText = "❌ Gagal menyimpan data: " + error;
+          alertBox.innerText = "❌ Gagal menyimpan data: " + error.message;
           alertBox.classList.remove('d-none');
           
           btn.disabled = false;
