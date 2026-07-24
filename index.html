@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Operasional Percetakan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      @media print {
+        body * { visibility: hidden; }
+        #modalPrintSlip, #modalPrintSlip * { visibility: visible; }
+        #modalPrintSlip { position: absolute; left: 0; top: 0; width: 100%; }
+        .no-print { display: none !important; }
+      }
+    </style>
 </head>
 <body class="bg-light">
 
@@ -13,7 +21,7 @@
     </script>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-primary mb-4 shadow-sm">
+    <nav class="navbar navbar-dark bg-primary mb-4 shadow-sm no-print">
         <div class="container d-flex justify-content-between">
             <span class="navbar-brand mb-0 h1">📦 Sistem Percetakan Sablon</span>
             <button class="btn btn-light btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
@@ -22,7 +30,7 @@
         </div>
     </nav>
 
-    <div class="container pb-5">
+    <div class="container pb-5 no-print">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 
@@ -185,11 +193,12 @@
                                             <tr>
                                                 <th class="ps-3">Nama Pekerja</th>
                                                 <th class="text-end">Total Pcs</th>
-                                                <th class="text-end pe-3">Total Upah</th>
+                                                <th class="text-end">Total Upah</th>
+                                                <th class="text-center pe-3">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody id="gaji-body">
-                                            <tr><td colspan="3" class="text-center py-3 text-muted">Memuat data gaji...</td></tr>
+                                            <tr><td colspan="4" class="text-center py-3 text-muted">Memuat data gaji...</td></tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -202,8 +211,8 @@
         </div>
     </div>
 
-    <!-- MODAL INPUT STOK IN (BARANG MASUK / RESTOK) -->
-    <div class="modal fade" id="modalTambahStok" tabindex="-1" aria-hidden="true">
+    <!-- MODAL INPUT STOK IN -->
+    <div class="modal fade no-print" id="modalTambahStok" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -242,11 +251,32 @@
       </div>
     </div>
 
+    <!-- MODAL CETAK SLIP GAJI -->
+    <div class="modal fade" id="modalPrintSlip" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title fw-bold no-print">🖨️ Pratinjau Slip Gaji</h5>
+            <button type="button" class="btn-close no-print" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="slipContent">
+            <!-- Isi Slip Gaji akan dirender secara dinamis lewat JS -->
+          </div>
+          <div class="modal-footer border-0 pt-0 no-print">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary fw-bold" onclick="window.print()">🖨️ Cetak / Save PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- SCRIPT LOGIKA SIMPAN & DASHBOARD -->
     <script>
       let globalTarifMap = {};
+      let globalGajiData = [];
+      let globalOrdersData = [];
 
       document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('tanggal').valueAsDate = new Date();
@@ -368,6 +398,9 @@
           .then(res => {
             if (res.status === "success") {
               
+              globalGajiData = res.gaji || [];
+              globalOrdersData = res.orders || [];
+
               // 1. Dropdown Bahan
               globalTarifMap = {};
               bahanSelect.innerHTML = '<option value="">-- Pilih Bahan Baku --</option>';
@@ -386,7 +419,7 @@
               if (res.orders.length === 0) {
                 tbodyOrders.innerHTML = '<tr><td colspan="7" class="text-center py-3 text-muted">Belum ada order.</td></tr>';
               } else {
-                res.orders.reverse().forEach(ord => {
+                [...res.orders].reverse().forEach(ord => {
                   const row = document.createElement("tr");
                   row.innerHTML = `
                     <td class="ps-3 fw-bold">${ord.noPO}</td>
@@ -441,7 +474,7 @@
               // 4. Riwayat Stok In
               tbodyStokIn.innerHTML = "";
               if (res.stokIn && res.stokIn.length > 0) {
-                res.stokIn.reverse().forEach(stk => {
+                [...res.stokIn].reverse().forEach(stk => {
                   const row = document.createElement("tr");
                   row.innerHTML = `
                     <td class="ps-3">${stk.tanggal}</td>
@@ -455,14 +488,19 @@
                 tbodyStokIn.innerHTML = '<tr><td colspan="4" class="text-center py-2 text-muted">Belum ada stok masuk.</td></tr>';
               }
 
-              // 5. Rekap Gaji
+              // 5. Rekap Gaji & Tombol Cetak Slip
               tbodyGaji.innerHTML = "";
               res.gaji.forEach(item => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                   <td class="ps-3 fw-semibold">${item.namaPekerja}</td>
                   <td class="text-end">${Number(item.totalQty).toLocaleString('id-ID')} pcs</td>
-                  <td class="text-end pe-3 fw-bold text-primary">Rp ${Number(item.totalGaji).toLocaleString('id-ID')}</td>
+                  <td class="text-end fw-bold text-primary">Rp ${Number(item.totalGaji).toLocaleString('id-ID')}</td>
+                  <td class="text-center pe-3">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="printSlipGaji('${item.namaPekerja}')">
+                      🖨️ Cetak
+                    </button>
+                  </td>
                 `;
                 tbodyGaji.appendChild(row);
               });
@@ -483,6 +521,75 @@
           if (res.status === "success") loadDashboardData();
           else alert("Gagal update status.");
         });
+      }
+
+      // Fungsi Renders & Tampil Slip Gaji
+      function printSlipGaji(namaPekerja) {
+        const filterOrders = globalOrdersData.filter(o => o.pekerja.toLowerCase() === namaPekerja.toLowerCase());
+        const totalPcs = filterOrders.reduce((sum, o) => sum + Number(o.qty), 0);
+        const totalUpah = filterOrders.reduce((sum, o) => sum + Number(o.totalUpah), 0);
+
+        let itemRows = "";
+        filterOrders.forEach(o => {
+          itemRows += `
+            <tr>
+              <td>${o.tanggal}</td>
+              <td>${o.noPO}</td>
+              <td>${o.bahan}</td>
+              <td class="text-end">${Number(o.qty).toLocaleString('id-ID')}</td>
+              <td class="text-end">Rp ${Number(o.totalUpah).toLocaleString('id-ID')}</td>
+            </tr>
+          `;
+        });
+
+        const slipHtml = `
+          <div class="border p-3 bg-white shadow-sm rounded">
+            <div class="text-center mb-3">
+              <h5 class="fw-bold mb-0">SLIP GAJI PEKERJA</h5>
+              <small class="text-muted">Sistem Percetakan Sablon</small>
+              <hr class="my-2">
+            </div>
+            <div class="mb-3">
+              <p class="mb-1"><strong>Nama Operator:</strong> ${namaPekerja}</p>
+              <p class="mb-0"><strong>Tanggal Cetak:</strong> ${new Date().toLocaleDateString('id-ID')}</p>
+            </div>
+            <table class="table table-sm table-bordered">
+              <thead class="table-light">
+                <tr>
+                  <th>Tgl</th>
+                  <th>No PO</th>
+                  <th>Bahan</th>
+                  <th class="text-end">Qty</th>
+                  <th class="text-end">Upah</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemRows.length > 0 ? itemRows : '<tr><td colspan="5" class="text-center">Tidak ada rincian.</td></tr>'}
+              </tbody>
+              <tfoot>
+                <tr class="fw-bold table-light">
+                  <td colspan="3">TOTAL AKUMULASI</td>
+                  <td class="text-end">${totalPcs.toLocaleString('id-ID')} pcs</td>
+                  <td class="text-end text-primary">Rp ${totalUpah.toLocaleString('id-ID')}</td>
+                </tr>
+              </tfoot>
+            </table>
+            <div class="d-flex justify-content-between mt-4 text-center">
+              <div>
+                <small>Penerima,</small><br><br><br>
+                <small><strong>(${namaPekerja})</strong></small>
+              </div>
+              <div>
+                <small>Admin Percetakan,</small><br><br><br>
+                <small><strong>( ........................ )</strong></small>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('slipContent').innerHTML = slipHtml;
+        const printModal = new bootstrap.Modal(document.getElementById('modalPrintSlip'));
+        printModal.show();
       }
     </script>
 </body>
